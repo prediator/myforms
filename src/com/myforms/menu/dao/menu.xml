@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="menu">
+<typeAlias alias="menu" type="com.myforms.menu.Menu"/> 
+<typeAlias alias="menuItem" type="com.myforms.menu.MenuItem"/>
+<resultMap class="menu" id="menuResultMap">
+	<result property="id" column="menu_id"/>
+	<result property="name" column="menu_name"/>
+	<result property="menuItems" column="menu_id" select="menu.getMenuItemsByMenu"/>
+	<result property="groupId" column="group_id"/>
+</resultMap>
+<resultMap class="menuItem" id="menuItemResultMap">
+	<result property="id" column="menu_item_id"/>
+	<result property="name" column="mn_name"/>
+	<result property="jsMethod" column="js_mthd"/>
+	<result property="js" column="js"/>
+	<result property="jsMenu" column="is_js_menu"/>
+	<result property="helpText" column="help_txt"/>
+	<result property="isVisible" column="is_visible"/>
+	<result property="isEnabled" column="is_enabled"/>
+	<result property="childMenus" column="parent_menu_id" select="menu.getMenuItemsByParentMenu"/>	
+	<result property="link" column="link"/>
+	<result property="sortOrder" column="sort_order"/>
+	
+</resultMap>
+
+<statement id="getMenuItemsByMenu" parameterClass="java.lang.String" resultMap="menuItemResultMap">
+	select 
+			menu_item_id, mn_name, js_mthd, js,is_js_menu,help_txt, is_visible, is_enabled , parent_menu_id, link, sort_order from menu_itm 
+	where menu_id = #value#
+</statement>
+<statement id="getMenuByGroup" parameterClass="java.lang.String" resultMap="menuResultMap">
+	select menu_id, menu_name, group_id from menu where group_id = #value#
+</statement>
+<statement id="getMenuItemsByParentMenu" parameterClass="java.lang.String" resultMap="menuResultMap">
+	select 
+			menu_item_id, mn_name, js_mthd, js,is_js_menu,help_txt, is_visible, is_enabled , parent_menu_id, link, sort_order from menu_itm 
+	where parent_menu_id = #value#
+</statement>
+</sqlMap>

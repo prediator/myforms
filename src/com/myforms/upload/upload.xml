@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="uploadInfo">
+<typeAlias type="com.myforms.upload.FileUploadInfo" alias="uploadInfo"/>
+<resultMap class="uploadInfo" id="uploadInfoResultMap">
+	<result property="id" column="upld_doc_id" />
+	<result property="fileName" column="doc_name" />
+	<result property="uploadDate" column="dt_uplded" javaType="java.sql.Timestamp"/>
+	<result property="uploadedBy" column="CRTD_BY" select="User.getUserById" />
+	<result property="document" column="doc_id" select="document.getPartialDocumentById"/>
+	<result property="location" column="doc_location" />	
+</resultMap>
+<select id="getUploadedItemsByDocumentId" parameterClass="java.lang.Long" resultMap="uploadInfoResultMap">
+     SELECT upld_doc_id, 
+			doc_name, 
+			dt_uplded, 
+			crtd_by, 
+			doc_id, 
+			doc_location	 
+	        FROM upld_doc where doc_id = #value#
+</select>
+<select id="getUploadedItemsByItemInfo" parameterClass="uploadInfo" resultMap="uploadInfoResultMap">
+     SELECT upld_doc_id, 
+			doc_name, 
+			dt_uplded, 
+			crtd_by, 
+			doc_id, 
+			doc_location	 
+	        FROM upld_doc where upld_doc_id=#id# and doc_id = #document.id#
+</select>
+<statement id="saveUploadedInfo" parameterClass="uploadInfo">
+INSERT INTO upld_doc
+(upld_doc_id,doc_name,dt_uplded,crtd_by,doc_id,doc_location)
+ VALUES (#id#,#fileName#,#uploadDate#,#uploadedBy.userId#,#document.id#,#location#)
+</statement>
+<statement id="deleteUploadedDocument" parameterClass="uploadInfo" resultClass="java.lang.Integer">
+    DELETE FROM upld_doc
+	<dynamic prepend="WHERE">
+	   <isNotNull property="document.id">
+	      doc_id = #document.id#	      
+	   </isNotNull>	   
+	   <isNotNull property="id">
+	    <isNotNull property="document.id">
+	    AND 
+	    </isNotNull>
+	       upld_doc_id = #id#
+	   </isNotNull>
+	</dynamic>    
+</statement>
+</sqlMap>

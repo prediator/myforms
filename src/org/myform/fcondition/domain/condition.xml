@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="cond">
+<typeAlias type="org.myform.fcondition.domain.Condition" alias="condition"/>
+<typeAlias type="org.myform.fcondition.domain.ConditionAction" alias="condaction"/>
+<typeAlias type="org.myform.fcondition.domain.ConditionConfig" alias="condconfig"/>
+
+<resultMap class="condition" id="conditionResultMap">
+<result column="cond_id" property="conditionId"/>
+<result column="op_type" property="operator" select="cond.getOprType"/>
+<result column="val" property="compareValue"/>
+<result column="val_type" property="valueType" select="cond.getValueType"/>
+<result column="source_fld" property="sourceField" select="templateField.getPartialTemplateFieldById"/>
+</resultMap>
+<resultMap class="condconfig" id="condConfigResultMap">
+<result column="cond_config_id" property="conditionConfigId"/>
+<result column="cond_type" property="conditionType" select="cond.getConditionType"/>
+<result column="exp" property="expression"/>
+<result column="override" property="isOverrided" />
+<result column="enabled" property="isEnabled" />
+<result column="cond_config_id" property="sourceConditions" select="cond.getConditionByConfigId"/>
+<result column="cond_config_id" property="conditionAction" select="cond.getConditionAction"/>
+</resultMap>
+<resultMap class="condaction" id="condActionResultMap">
+<result column="act_id" property="condActionId"/>
+<result column="cond_config_id" property="conditionConfigId"/>
+<result column="new_value" property="value"/>
+<result column="act_id" property="valueList" select="cond.getCondActionValues"/>
+</resultMap>
+<select id="getConditionsByTarget" parameterClass="java.lang.Integer" resultMap="condConfigResultMap">
+select cond_config_id, cond_type, exp, override, enabled, target_fld from cond_config where target_fld = #value#
+</select>
+<select id="getConditionsBySource" parameterClass="java.lang.Integer" resultMap="condConfigResultMap">
+select cond_config_id, cond_type, exp, override, enabled, target_fld from cond_config where cond_config_id in ( select cond_config_id from cond where source_fld = #value# )
+</select>
+<select id="getConditionByConfigId" parameterClass="java.lang.Integer" resultMap="conditionResultMap">
+select cond_id, op_type, val, val_type, source_fld from cond where cond_config_id = #value#
+</select>
+<select id="getValueType" resultClass="java.lang.String">
+SELECT VAL_TYPE FROM COND_VAL_TYPE WHERE VAL_TYPE_ID = #value#
+</select>
+<select id="getOprType" resultClass="java.lang.String">
+SELECT OP_TYPE FROM cond_oprtr WHERE OP_ID = #value#
+</select>
+<select id="getConditionType" resultClass="java.lang.String">
+SELECT COND_TYPE FROM COND_TYPE WHERE COND_TYPE_ID = #value#
+</select>
+<select id="getConditionAction" parameterClass="java.lang.Integer" resultMap="condActionResultMap">
+select act_id, cond_config_id, new_value from cond_actn where cond_config_id = #value#  
+</select>
+<select id="getCondActionValues" parameterClass="java.lang.Integer" resultClass="java.lang.String">
+select val from cond_vals where act_id = #value# 
+</select>
+</sqlMap>

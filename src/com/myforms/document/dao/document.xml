@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="document">
+<typeAlias type="com.myforms.web.model.Document" alias="document"/>
+<resultMap class="document" id="partialDocumentResultMap">
+	<result property="id" column="ID" />
+	<result property="displayId" column="DISPLAY_ID" />
+	<result property="title" column="TITLE" />
+	<result property="createdBy" column="CRTD_BY" select="User.getUserById" />
+	<result property="createdOn" column="CRTD_ON" javaType="java.sql.Timestamp"/>
+	<result property="updatedOn" column="LST_UPDTED_ON" javaType="java.sql.Timestamp" />
+	<result property="updatedBy" column="LST_UPDTED_BY" select="User.getUserById" />
+	<result property="version" column="VRSN" />
+</resultMap>
+<resultMap class="document" id="documentResultMap">
+	<result property="id" column="ID" />
+	<result property="displayId" column="DISPLAY_ID" />
+	<result property="title" column="TITLE" />
+	<result property="createdBy" column="CRTD_BY" select="User.getUserById" />
+	<result property="createdOn" column="CRTD_ON" javaType="java.sql.Timestamp"/>
+	<result property="template" column="TMPL_ID" select="template.getTemplateById" />
+	<result property="updatedOn" column="LST_UPDTED_ON" javaType="java.sql.Timestamp" />
+	<result property="updatedBy" column="LST_UPDTED_BY" select="User.getUserById" />
+	<result property="uploadedItems" column="ID" select="uploadInfo.getUploadedItemsByDocumentId" />
+	<result property="richTextDocs" column="ID" select="rtDoc.getRichTextDocByDocumentId" />
+	<result property="version" column="VRSN" />
+	<result property="fieldList"  column="ID" select="fld.getFieldsByDocumentId"/>	
+</resultMap>
+<select id="getPartialDocumentById" resultMap="partialDocumentResultMap">
+SELECT ID,
+       DISPLAY_ID,
+       TITLE,
+       CRTD_BY,
+       CRTD_ON,
+       LST_UPDTED_ON,
+       LST_UPDTED_BY,
+       VRSN
+       FROM TRAN_DOC WHERE ID = #value#
+</select>
+<select id="getDocumentById" resultMap="documentResultMap">
+SELECT ID,
+       DISPLAY_ID,
+       TITLE,
+       CRTD_BY,
+       CRTD_ON,
+       TMPL_ID,
+       LST_UPDTED_ON,
+       LST_UPDTED_BY,
+       VRSN
+       FROM TRAN_DOC WHERE ID = #value#
+</select>
+<select id="getDocumentByDisplayId" resultMap="documentResultMap">
+SELECT ID,
+       DISPLAY_ID,
+       TITLE,
+       CRTD_BY,
+       CRTD_ON,
+       TMPL_ID,
+       LST_UPDTED_ON,
+       LST_UPDTED_BY,
+       VRSN
+       FROM TRAN_DOC WHERE DISPLAY_ID = #value#
+</select>
+<statement id="saveDocument" parameterClass="document">
+INSERT INTO TRAN_DOC
+(ID, DISPLAY_ID, TITLE, CRTD_ON, CRTD_BY, TMPL_ID, LST_UPDTED_ON, LST_UPDTED_BY, VRSN)
+ VALUES (#id#,#displayId#,#title#,#createdOn#,#createdBy.userId#,#template.templateId#,#updatedOn#,#updatedBy.userId#,#version#)
+</statement>
+<statement id="isConcurrentUpdate" resultClass="java.lang.Integer" parameterClass="java.util.Map">
+SELECT count(*) as isConcurrent FROM TRAN_DOC where ID  = #documentId# AND LST_UPDTED_ON > #lastUptTimeStampp#
+</statement>
+<statement id="updateDocument" parameterClass="document" resultClass="java.lang.Integer">
+UPDATE TRAN_DOC set 
+      <isNotNull property="title">
+        TITLE =  #title# , 
+      </isNotNull>
+      <isNotNull property="updatedOn">
+        LST_UPDTED_ON = #updatedOn:TIMESTAMP# ,
+      </isNotNull>
+      <isNotNull property="updatedBy.userId">
+        LST_UPDTED_BY = #updatedBy.userId#
+      </isNotNull>        
+WHERE ID = #id#
+</statement>
+<select id="getAllDocuments" resultMap="documentResultMap">
+SELECT ID,
+       DISPLAY_ID,
+       TITLE,
+       CRTD_BY,
+       CRTD_ON,
+       TMPL_ID,
+       LST_UPDTED_ON,
+       LST_UPDTED_BY,
+       VRSN
+       FROM TRAN_DOC
+</select>
+<select id="isDisplayIdExist" parameterClass="java.lang.String" resultClass="java.lang.Integer">
+SELECT 1 as result
+       FROM TRAN_DOC where DISPLAY_ID = #value#
+</select>
+</sqlMap>

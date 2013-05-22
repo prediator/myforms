@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="rtDoc">
+<typeAlias type="com.myforms.createdoc.RichTextDoc" alias="richTextDoc"/>
+<resultMap class="richTextDoc" id="richTextDocResultMap">
+	<result property="richTextDocId" column="rtext_id" />
+	<result property="documentId" column="doc_id" />
+	<result property="title" column="title" />
+	<result property="createdBy" column="crt_by" select="User.getUserById" />
+	<result property="createdOn" column="crt_on" />
+	<result property="dataList" column="rtext_id" select="rtDoc.getRichTextDataListByRTId"/>
+</resultMap>
+
+<statement id="saveRichTextDoc" parameterClass="richTextDoc">
+INSERT INTO rtxt
+(rtext_id, doc_id,title, crt_by, crt_on)
+ VALUES (#richTextDocId#,#documentId#,#title#,#createdBy.userId#,#createdOn#)
+</statement>
+<statement id="saveRichTextDocData">
+INSERT INTO doc_rtxt
+(doc_rtxt_id, rtext_id,doc_rtxt, SEQ)
+ VALUES (#richTextId#,#richTextDocId#,#richText#,#sequence#)
+</statement>
+<statement id="deleteRichTextDocDataByRTId">
+DELETE  FROM  doc_rtxt WHERE rtext_id = #value# 
+</statement>
+<statement id="getRichTextDataListByRTId" parameterClass="java.lang.Integer" resultClass="java.lang.String">
+SELECT doc_rtxt FROM doc_rtxt WHERE rtext_id = #value# ORDER BY SEQ 
+</statement>
+<statement id="getRichTextDocByDocumentId" parameterClass="java.lang.Integer" resultMap="richTextDocResultMap">
+SELECT rtext_id, doc_id,title, crt_by, crt_on from rtxt where DOC_ID = #value#;
+</statement>
+<statement id="getRichTextDocById" parameterClass="richTextDoc" resultMap="richTextDocResultMap">
+SELECT rtext_id, doc_id,title, crt_by, crt_on from rtxt where DOC_ID = #documentId# and rtext_id = #richTextDocId#; 
+</statement>
+</sqlMap>

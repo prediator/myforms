@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="User">
+<typeAlias type="com.spring.model.Login" alias="login"/>
+<typeAlias type="com.myforms.usergroup.model.User" alias="users"/>
+<typeAlias type="com.myforms.usergroup.model.Role" alias="role"/>
+<typeAlias type="com.spring.service.bean.GrantedAuthorityImpl" alias="grantedauthority"/>
+<resultMap class="login" id="loginResultMap">
+<result property="username" column="username"/>
+<result property="password" column="password"/>
+</resultMap>
+<resultMap class="users" id="userResultMap">
+<result property="userId" column="userid"/>
+<result property="username" column="username"/>
+<result property="password" column="password"/>
+<result property="firstName" column="first_name"/>
+<result property="lastName" column="last_name"/>
+<result property="createdOn" column="created_on"/>
+<result property="emailId" column="email_id"/>
+<result property="isEnabled" column="is_enabled"/>
+<result property="authorities" column="userid" select="User.getRolesByUserid" />
+<result property="client" column="clnt_id" select="clnt.getClientById"/>
+</resultMap>
+<resultMap class="users" id="partialUserMap">
+    <result property="userId" column="userid"/>
+    <result property="firstName" column="first_name"/>
+	<result property="lastName" column="last_name"/>
+</resultMap>
+<resultMap class="role" id="roleMap">
+    <result property="roleId" column="roleid"/>
+    <result property="role" column="role"/>
+	<result property="roleName" column="role_name"/>
+</resultMap>
+<select id="getLoginByUsername" resultMap="loginResultMap" parameterClass = "java.lang.String">
+select username,password from login where username = #value#
+</select>
+<select id="getAllLogins" resultMap="loginResultMap" parameterClass = "java.lang.String">
+select username,password from login
+</select>
+<insert id="insertLogin" parameterClass="login">
+insert into login (username, password) values(#username#,#password#);
+</insert>
+<select id="getRolesByUserid" parameterClass="java.lang.Integer"  resultClass="grantedauthority">
+select role as authority from roles where roleid in (select distinct roleid from user_roles where userid = #value#)
+</select>
+<select id="getUserById" parameterClass="java.lang.Long" resultMap="userResultMap">
+select userid,username,password,first_name,last_name,created_on,email_id,is_enabled, clnt_id from users where userid = #value#
+</select>
+<select id="getUserByUsername" parameterClass="java.lang.String" resultMap="userResultMap">
+select userid,username,password,first_name,last_name,created_on,email_id,is_enabled, clnt_id  from users where username = #value#
+</select>
+<select id="getPartialUserByUsername" parameterClass="java.lang.String" resultMap="partialUserMap">
+select userid,first_name,last_name from users  where username = #value#
+</select>
+<select id="getPartialUserById" parameterClass="java.lang.Long" resultMap="partialUserMap">
+select userid,first_name,last_name from users where userid = #value#
+</select>
+<select id="getAllRoles" resultMap="roleMap">
+select roleid,role,role_name from roles
+</select>
+<insert id="saveUser" parameterClass="users">
+insert into users  
+(userid,username,password,first_name,last_name,created_on,email_id,is_enabled, clnt_id) values
+(#userId#,#username#,#password#,#firstName#,#lastName#,#createdOn#,#emailId#,#isEnabled#,#client.clientId#);
+</insert>
+</sqlMap>

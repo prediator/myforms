@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="templateField">
+<typeAlias type="com.myforms.field.config.model.TemplateField" alias="templateField"/>
+<typeAlias type="com.myforms.field.config.model.FieldType" alias="fieldtype"/>
+<resultMap class="fieldtype" id="fieldtypeResultMap">
+	<result property="fieldTypeId" column="fld_type_id" />
+	<result property="fieldType" column="fld_type" />
+</resultMap>
+<resultMap class="templateField" id="partialTemplateFieldResultMap">
+	<result property="fieldId" column="FLD_ID" />
+	<result property="fieldName" column="FLD_NAME" />
+	<result property="fieldTitle" column="FLD_TITLE" />
+	<result property="fieldHeltText" column="FLD_HELP_TXT" />
+	<result property="fieldLegth" column="FLD_LENGTH" />
+	<result property="isVisible" column="IS_VISIBLE" />
+	<result property="isRequired" column="IS_REQUIRED" />
+	<result property="isCommon" column="IS_COMMON" />
+	<result property="isEnabled" column="IS_ENABLED" />
+	<result property="defaultValue" column="DEFAULT_VALUE" />
+	<result property="version" column="VRSN" />
+	<result property="fieldType" column="FLD_TYPE_ID" select="templateField.getFieldTypeById" />
+</resultMap>
+<resultMap class="templateField" id="templateFieldResultMap">
+	<result property="fieldId" column="FLD_ID" />
+	<result property="fieldName" column="FLD_NAME" />
+	<result property="fieldTitle" column="FLD_TITLE" />
+	<result property="fieldHeltText" column="FLD_HELP_TXT" />
+	<result property="fieldLegth" column="FLD_LENGTH" />
+	<result property="isVisible" column="IS_VISIBLE" />
+	<result property="isRequired" column="IS_REQUIRED" />
+	<result property="isCommon" column="IS_COMMON" />
+	<result property="list" column="list_id"  select="list.getListByListId"/>
+	<result property="isEnabled" column="IS_ENABLED" />
+	<result property="defaultValue" column="DEFAULT_VALUE" />
+	<result property="createdOn" column="CREATED_ON" javaType="java.sql.Timestamp"/>
+	<result property="isMultiselect" column="is_multiselect" javaType="java.lang.Boolean"/>
+	<result property="version" column="VRSN" />
+	<result property="template" column="TMPL_ID" select="template.getPartialTemplateById" />
+	<result property="fieldType" column="FLD_TYPE_ID" select="templateField.getFieldTypeById" />
+	<result property="createdBy" column="CREATED_BY" select="User.getUserById" />
+	<result column="fld_id" property="conditionsByTarget" select="cond.getConditionsByTarget"/>
+	<result column="fld_id" property="conditionsBySource" select="cond.getConditionsBySource"/>
+</resultMap>
+<resultMap id="map" class="java.util.HashMap">
+<result property="${FLD_NAME}" column="FLD_ID" select="templateField.getTemplateFieldById" />
+</resultMap>
+<statement id="saveTemplateField" parameterClass="templateField">
+INSERT INTO FLD (FLD_ID, 
+	FLD_NAME, 
+	FLD_TITLE, 
+	FLD_HELP_TXT, 
+	FLD_LENGTH, 
+	IS_VISIBLE, 
+	IS_REQUIRED, 
+	FLD_TYPE_ID, 
+	IS_COMMON, 
+	IS_ENABLED, 
+	TMPL_ID,
+	LIST_ID,
+	IS_MULTISELECT, 
+	DEFAULT_VALUE, 
+	CREATED_BY, 
+	CREATED_ON, 
+	VRSN
+	 )VALUES (
+	 #fieldId#,
+	 #fieldName#,
+	 #fieldTitle#,
+	 #fieldHeltText#,
+	 #fieldLegth#,
+	 #isVisible#,
+	 #isRequired#,
+	 #fieldType.fieldTypeId#,
+	 #isCommon#,
+	 #isEnabled#,
+	 #template.templateId#,	 
+	 #list.id#,
+	 false,
+	 #defaultValue#,
+	 #createdBy.userId#,
+	 #createdOn#,
+	 #version#
+	 );
+</statement>
+<select id="getTemplateFieldById" parameterClass="java.lang.Integer" resultMap="templateFieldResultMap">
+SELECT 	FLD_ID, 
+	FLD_NAME, 
+	FLD_TITLE, 
+	FLD_HELP_TXT, 
+	FLD_LENGTH, 
+	IS_VISIBLE, 
+	IS_REQUIRED, 
+	FLD_TYPE_ID, 
+	IS_COMMON, 
+	IS_ENABLED, 
+	TMPL_ID, 
+	LIST_ID,
+	IS_MULTISELECT,
+	DEFAULT_VALUE, 
+	CREATED_BY, 
+	CREATED_ON, 
+	VRSN
+	 
+	FROM 
+	SPRING.FLD	
+	WHERE FLD_ID = #value#
+</select>
+<select id="getPartialTemplateFieldById" parameterClass="java.lang.Integer" resultMap="partialTemplateFieldResultMap">
+SELECT 	FLD_ID, 
+	FLD_NAME, 
+	FLD_TITLE, 
+	FLD_HELP_TXT, 
+	FLD_LENGTH, 
+	IS_VISIBLE, 
+	IS_REQUIRED, 
+	FLD_TYPE_ID, 
+	IS_COMMON, 
+	IS_ENABLED, 
+	TMPL_ID, 
+	LIST_ID,
+	IS_MULTISELECT,
+	DEFAULT_VALUE, 
+	CREATED_BY, 
+	CREATED_ON, 
+	VRSN
+	 
+	FROM 
+	SPRING.FLD	
+	WHERE FLD_ID = #value#
+</select>
+<select id="getTemplateFieldByName" parameterClass="java.lang.String" resultMap="templateFieldResultMap">
+SELECT 	FLD_ID, 
+	FLD_NAME, 
+	FLD_TITLE, 
+	FLD_HELP_TXT, 
+	FLD_LENGTH, 
+	IS_VISIBLE, 
+	IS_REQUIRED, 
+	FLD_TYPE_ID, 
+	IS_COMMON, 
+	IS_ENABLED, 
+	TMPL_ID, 
+		LIST_ID,
+	IS_MULTISELECT,
+	DEFAULT_VALUE, 
+	CREATED_BY, 
+	CREATED_ON, 
+	VRSN
+	 
+	FROM 
+	SPRING.FLD	
+	WHERE FLD_NAME = #value#
+</select>
+<select id="getTemplateFieldMapByTemplateId" parameterClass="java.lang.Integer" resultMap="templateFieldResultMap">
+SELECT 	FLD_ID, 
+	FLD_NAME, 
+	FLD_TITLE, 
+	FLD_HELP_TXT, 
+	FLD_LENGTH, 
+	IS_VISIBLE, 
+	IS_REQUIRED, 
+	FLD_TYPE_ID, 
+	IS_COMMON, 
+	IS_ENABLED, 
+	TMPL_ID,
+	LIST_ID,
+	IS_MULTISELECT, 
+	DEFAULT_VALUE, 
+	CREATED_BY, 
+	CREATED_ON, 
+	VRSN
+	 
+	FROM 
+	SPRING.FLD	
+	WHERE TMPL_ID = #value#
+</select>
+<select id="getFieldTypeById" parameterClass="java.lang.Integer" resultMap="fieldtypeResultMap">
+select fld_type_id, fld_type from fld_type where fld_type_id = #value#
+</select>
+<select id="getFieldTypeByType" parameterClass="java.lang.String" resultMap="fieldtypeResultMap">
+select fld_type_id, fld_type from fld_type where fld_type = #value#
+</select>
+</sqlMap>

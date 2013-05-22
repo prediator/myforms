@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="template">
+<typeAlias type="com.myforms.template.config.model.Template" alias="template"/>
+<resultMap class="template" id="templateResultMap">
+	<result property="templateId" column="TMPL_ID" />
+	<result property="templateName" column="TMPL_NAME" />
+	<result property="renderXml" column="RENDER_XML" />
+	<result property="templateTitle" column="TITLE" />
+	<result property="isCommon" column="IS_COMMON" />
+	<result property="isEnable" column="IS_ENABLE" />
+	<result property="createdOn" column="CREATED_ON" javaType="java.sql.Timestamp"/>
+	<result property="description" column="DESCRIPTION" />
+	<result property="isAbstract" column="IS_ABSTRACT" />
+	<result property="createDocEnabled" column="CRT_DOC_ENABLED" />
+	<result property="uploadDocEnabled" column="UPLD_DOC_ENABLED" />
+	<result property="version" column="VRSN" />
+	<result property="createdBy" column="CREATED_BY" select="User.getUserById" />
+	<result property="parentTemplate" column="PARENT_ID" select="User.getUserById"/>
+	<result property="templateFieldList"  column="TMPL_ID" select="templateField.getTemplateFieldMapByTemplateId"/>
+</resultMap>
+<resultMap class="template" id="partialTemplateResultMap">
+	<result property="templateId" column="TMPL_ID" />
+	<result property="templateName" column="TMPL_NAME" />
+	<result property="templateTitle" column="TITLE" />
+	<result property="version" column="VRSN" />
+	<result property="description" column="DESCRIPTION" />
+</resultMap>
+<insert id="saveTemplate" parameterClass="template">
+ INSERT INTO TMPL (
+ TMPL_ID, 
+	TMPL_NAME, 
+	RENDER_XML, 
+	TITLE, 
+	PARENT_ID, 
+	IS_COMMON, 
+	IS_ENABLE, 
+	CREATED_ON, 
+	CREATED_BY, 
+	DESCRIPTION, 
+	IS_ABSTRACT, 
+	CRT_DOC_ENABLED, 
+	UPLD_DOC_ENABLED, 
+	VRSN	 
+	) VALUES (
+	#templateId#,
+	#templateName#,
+	#renderXml#,
+	#templateTitle#,
+	#parentTemplate.templateId#,
+	#isCommon#,
+	#isEnable#,
+	#createdOn#,
+	#createdBy.userId#,
+	#description#,
+	#isAbstract#,
+	#createDocEnabled#,
+	#uploadDocEnabled#,
+	#version#
+	);
+</insert>
+<select id="getTemplateById" parameterClass="java.lang.Integer" resultMap="templateResultMap">
+SELECT 	TMPL_ID, 
+	TMPL_NAME, 
+	RENDER_XML, 
+	TITLE, 
+	PARENT_ID, 
+	IS_COMMON, 
+	IS_ENABLE, 
+	CREATED_ON, 
+	CREATED_BY, 
+	DESCRIPTION, 
+	IS_ABSTRACT, 
+	CRT_DOC_ENABLED, 
+	UPLD_DOC_ENABLED, 
+	VRSN	 
+	FROM 
+	SPRING.TMPL 	
+	WHERE TMPL_ID = #value#
+</select>
+<select id="getTemplateByName" parameterClass="java.lang.String" resultMap="templateResultMap">
+
+SELECT 	TMPL_ID, 
+	TMPL_NAME, 
+	RENDER_XML, 
+	TITLE, 
+	PARENT_ID, 
+	IS_COMMON, 
+	IS_ENABLE, 
+	CREATED_ON, 
+	CREATED_BY, 
+	DESCRIPTION, 
+	IS_ABSTRACT, 
+	CRT_DOC_ENABLED, 
+	UPLD_DOC_ENABLED, 
+	VRSN	 
+	FROM 
+	SPRING.TMPL 	
+	WHERE TMPL_ID = #value#
+</select>
+<select id="getPartialTemplateById" parameterClass="java.lang.Integer" resultMap="partialTemplateResultMap">
+	SELECT 	TMPL_ID, 
+		TMPL_NAME, 
+		VRSN	 
+		FROM 
+		SPRING.TMPL 	
+		WHERE TMPL_ID = #value#
+</select>
+<select id="getTemplateListByIds" parameterClass="java.util.List" resultMap="templateResultMap">
+	SELECT 	TMPL_ID, 
+		TMPL_NAME, 
+		RENDER_XML, 
+		TITLE, 
+		PARENT_ID, 
+		IS_COMMON, 
+		IS_ENABLE, 
+		CREATED_ON, 
+		CREATED_BY, 
+		DESCRIPTION, 
+		IS_ABSTRACT, 
+		CRT_DOC_ENABLED, 
+		UPLD_DOC_ENABLED, 
+		VRSN	 
+		FROM 
+		SPRING.TMPL 	
+		WHERE TMPL_ID in
+		<iterate open="(" close=")" conjunction=",">
+	       #[]#
+		</iterate>
+</select>
+<select id="getAllTemplates" resultMap="partialTemplateResultMap">
+	SELECT 	TMPL_ID, 
+		TMPL_NAME,
+		DESCRIPTION, 
+		TITLE,
+		VRSN	 
+		FROM 
+		SPRING.TMPL 	
+		
+</select>
+<select id="getTemplateListByClientId" parameterClass="java.lang.Long" resultMap="partialTemplateResultMap">
+SELECT 	TMPL_ID, 
+		TMPL_NAME,
+		DESCRIPTION, 
+		TITLE,
+		VRSN	 
+		FROM 
+		SPRING.TMPL	
+		WHERE TMPL_ID in (select tmpl_id from clnt_tmpl where clnt_id = #value#)
+</select>
+<statement id="saveClientTemplate" parameterClass="java.util.Map">
+insert into clnt_tmpl (clnt_tmpl_id,clnt_id,tmpl_id) values (#clientTmplId#,#clientId#,#templateId#)
+</statement>
+</sqlMap>
