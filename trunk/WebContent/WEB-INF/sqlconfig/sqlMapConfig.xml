@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMapConfig PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+<settings useStatementNamespaces="true"/>
+<sqlMap resource="User.xml" />
+<sqlMap resource="com\myforms\field\dao\templateField.xml" />
+<sqlMap resource="com\myforms\template\dao\template.xml" />
+<sqlMap resource="com\myforms\usergroup\model\User.xml" />
+<sqlMap resource="com\myforms\list\dao\list.xml" />
+<sqlMap resource="com\myforms\document\dao\document.xml" />
+<sqlMap resource="com\myforms\document\dao\fld.xml" />
+<sqlMap resource="org\myform\fcondition\domain\condition.xml" />
+<sqlMap resource="org\myform\keygen\dao\keygen.xml"/>
+<sqlMap resource="com\myforms\menu\dao\menu.xml"/>
+<sqlMap resource="com\myforms\client\client.xml"/>
+<sqlMap resource="com\myforms\upload\upload.xml"/>
+<sqlMap resource="com\myforms\common\notes.xml"/>
+<sqlMap resource="com\myforms\createdoc\dao\richTextDoc.xml"/>
+<sqlMap resource="com\myforms\racf\racf.xml"/>
+</sqlMapConfig>

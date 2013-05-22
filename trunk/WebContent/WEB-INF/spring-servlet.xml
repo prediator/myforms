@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+--><beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jee="http://www.springframework.org/schema/jee" 
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="
+                http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans.xsd
+                http://www.springframework.org/schema/context
+                http://www.springframework.org/schema/context/spring-context.xsd
+                http://www.springframework.org/schema/aop  
+                http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+                http://www.springframework.org/schema/jee 
+                http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
+                http://www.springframework.org/schema/tx 
+                http://www.springframework.org/schema/tx/spring-tx-3.0.xsd                
+                http://www.springframework.org/schema/mvc 
+                http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+                http://www.springframework.org/schema/security
+				http://www.springframework.org/schema/security/spring-security-3.0.3.xsd">
+            <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"/> <!-- Controller -->
+            
+<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
+        <context:component-scan base-package="com.myforms" />
+<!-- ========================= VIEW DEFINITIONS ========================= -->
+
+	<bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="prefix" value="/WEB-INF/jsps/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+	 <bean id="ftlViewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+          <property name="order" value="1"/>     
+		  <property name="cache" value="true"/>
+		  <property name="prefix" value=""/>
+		  <property name="suffix" value=".ftl"/>		  
+	</bean>
+	<!-- Configure the multipart resolver -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- one of the properties available; the maximum file size in bytes -->
+        <property name="maxUploadSize" value="10000000"/>
+    </bean>
+	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+  <property name="templateLoaderPath" value="classpath:templates"/>
+</bean>
+	
+	<bean id="defaultHandlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
+	<bean id="publicUrlMapping"
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+		<value>
+		/login.html=loginController	
+		/home.html=homeController	
+		/refreshTemplate.html=refreshTemplateController	
+		/createUpdateTemplate.html=templateFormController	
+		</value>
+		</property>
+		<property name="interceptors">
+		<list>
+		  <ref bean="menuProcessorInterceptor"/>
+		</list>
+		</property>
+     </bean>
+     <bean id="documentUrlMapping"
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+		<value>
+		/editDocument.html= documentFormController
+		</value>
+		</property>
+		<property name="interceptors">
+		<list>
+		 <ref bean="menuProcessorInterceptor"/>
+		  <ref bean="conditionProcessorInterceptor"/>
+		  
+		</list>
+		</property>
+     </bean>
+
+     <bean name="loginController" class="com.springfirst.simplecontroller.HomeController">
+			<property name="commandClass" value="com.spring.model.Login"/>
+			<property name="commandName" value="login"/>		
+			<property name="loginService" ref="loginService"/>
+			<property name="authenticationManager" ref="authenticationManager"/>
+			<property name="createFetchTemplateServiceManager" ref="createFetchTemplateServiceManager"/>
+	</bean>
+     <bean name="homeController" class="com.springfirst.simplecontroller.SimpleLoginFormController">
+			<property name="loginService" ref="loginService"/>
+			<property name="saveUsersServiceManager" ref="saveUsersServiceManager"/>	
+			<property name="createFetchTemplateServiceManager" ref="createFetchTemplateServiceManager"/>
+	</bean>
+	<bean name="refreshTemplateController" class="com.myforms.template.web.ftl.RefreshFTLsController">
+			<property name="createandSaveFTLService" ref="createandSaveFTLService"/>
+			<property name="createFetchTemplateServiceManager" ref="createFetchTemplateServiceManager"/>
+	</bean>
+	<bean name="documentFormController" class="com.myforms.web.controllers.DocumentFormController">
+	        <property name="commandName" value="document" />
+	        <property name="commandClass" value="com.myforms.web.model.Document"/>
+			<property name="createFetchDocumentServiceManager" ref="createFetchDocumentServiceManager"/>
+			<property name="saveUpdateDocumentServiceManager" ref="saveUpdateDocumentServiceManager"/>
+			<property name="fieldServiceManager" ref="fieldServiceManager"></property>
+			<property name="fileUploadDownloadServiceManager" ref="fileUploadDownloadServiceManager"></property>
+			<property name="validator"  ref="documentFormValidator" ></property>
+	</bean>
+	<bean id="documentFormValidator" class="com.myforms.web.validator.DocumentFormValidator"></bean>
+			
+	<bean id="templateFormaValidator" class="com.myforms.web.validator.TemplateFormValidator"></bean>
+	
+	<bean id="authenticationManager" class="com.spring.service.securitymanager.SampleAuthenticationManager">
+	<property name="loginService" ref="loginService"/>	
+	</bean>	
+	<bean name="templateFormController" class="com.myforms.web.controllers.TemplateFormController">
+	        <property name="commandName" value="templateMetaData" />
+	        <property name="commandClass" value="com.myforms.template.config.model.TemplateMetaData"/>
+			<property name="formView" value="template"/>
+			<property name="validator" ref="templateFormaValidator"/>
+	</bean>
+<!-- Custom property editor -->
+<!--<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+  <property name="customEditors">
+    <map>
+      <entry key="com.myforms.field.ListField">
+        <bean class="com.myforms.field.propertyeditor.ListFieldPropertyEditor">         
+        </bean>
+      </entry>
+      <entry key="com.myforms.field.TextField">
+        <bean class="com.myforms.field.propertyeditor.TextFieldPropertyEditor">         
+        </bean>
+      </entry>
+    </map>
+  </property>
+</bean>
+-->
+<!-- Interceptors -->
+<bean id="conditionProcessorInterceptor" class="org.myform.fcondition.interceptor.ConditionProcessorInterceptor">
+</bean>
+<bean id="menuProcessorInterceptor" class="org.myform.menu.interceptor.MenuProcessorInterceptor">
+	<property name="menuServiceManager" ref="menuServiceManager"/>
+</bean>
+<!-- Exception handling -->
+<!--<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+	<property name="exceptionMappings">
+	<props>
+		<prop key="java.lang.Exception">error</prop>
+	</props>
+	</property>
+</bean>
+--><!-- load properties -->
+<bean class="com.myforms.util.LoadProperties"/>
+</beans>
