@@ -1,0 +1,88 @@
+div.txt{
+
+height: 60px;
+width: 120px;
+text-align: left;
+
+}
+.lst{
+height: 60px;
+width: 120px;
+text-align: left;
+}
+div.div_fld_row{
+padding-top: 10px;
+float: left;
+width: 330px;
+}
+.hidden_doc_errors{
+color: red;
+font-family: verdana;
+font-size: 11px;
+}
+input.txt{
+height: 20px;
+width: 110px;
+text-align: left;
+}
+.fldTxt{
+height: 20px;
+width: 110px;
+text-align: left;
+}
+.checkbox{
+width: 20px;
+}
+input.ts_txt{
+
+}
+select.slt{
+height: 20px;
+width: 110px;
+}
+#cart_items tr td {
+            vertical-align: top;
+            text-align: left;
+        }
+span.fade_back{
+color: gray;
+}
+span.fs_fld{
+float: left;
+    font-weight: bold;
+    width: 220px;
+}
+span.fs_fld_link{
+float: left;
+    font-weight: bold;
+    width: 250px;
+}
+img.save{
+src:url(../images/save.jpg);
+cursor: pointer;
+}
+#tmplate_settings{
+	
+    
+        
+    display: block;
+    float: left;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+
+#templ_title{
+	font-size: 140%;
+    font-weight: bold;
+    padding: 10px 10px 20px;
+    position: relative;
+    width: 100%;
+    height:100%;
+     
+}
+#edit-fld-seetings{
+font-size: 70%;
+padding: 10px;
+}

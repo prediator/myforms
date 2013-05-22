@@ -1,0 +1,93 @@
+div.header{
+background-color:#F8E0EC;
+height: 10%;
+width: 106%;
+z-index: 10000;
+font-size: 70px;
+}
+.header_logo{
+      width: 100%;
+      float: left; 
+margin-left: 1%;
+      }
+      .image .loc4{
+top:5%; /* in conjunction with left property, decides the text position */
+left :6%;
+font-size: xx-large;
+}
+.image .text {
+	position:absolute;
+	
+	width:300px; /* optional, though better have one */
+	font-size: x-large;
+	font-weight: bold;
+	font-style: oblique;
+	color: #0B3B17;	
+}
+.leftNav{
+width : 15%;
+}
+.dataTable{
+margin-left: 3%;
+width: 70%;
+}
+ul.menuitm{
+height : 8%;
+}
+ul li.menu-itm{
+width : 100px;
+padding: 5px;
+font-family: verdana;
+font-weight: bold;
+color: white;
+}
+div.applemenu{
+margin-left : 3%;
+padding: 0;
+width: 19%; /*width of menu*/
+border: 1px solid #9A9A9A;
+}
+
+.applemenu div.silverheader a{
+background: black url(../images/silvergradient.gif) repeat-x center left;
+font: normal 12px Tahoma, "Lucida Grande", "Trebuchet MS", Helvetica, sans-serif;
+color: white;
+display: block;
+position: relative; /*To help in the anchoring of the ".statusicon" icon image*/
+width: auto;
+padding: 5px 0;
+padding-left: 8px;
+text-decoration: none;
+}
+
+
+.applemenu div.silverheader a:visited, .applemenu div.silverheader a:active{
+color: white;
+}
+
+
+.applemenu div.selected a, .applemenu div.silverheader a:hover{
+background-image: url(../images/silvergradientover.gif);
+color: white;
+}
+
+.applemenu div.submenu{ /*DIV that contains each sub menu*/
+background: white;
+padding: 5px;
+height: 300px; /*Height that applies to all sub menu DIVs. A good idea when headers are toggled via "mouseover" instead of "click"*/
+}
+A.ssmItems:link		{color:black;text-decoration:none;}
+A.ssmItems:hover	{color:black;text-decoration:none;
+background-color: #FFFF99;
+}
+A.admin_menu:active	{color:black;text-decoration:none;}
+A.admin_menu:visited	{color:black;text-decoration:none;}
+
+A.admin_menu:link		{color:black;text-decoration:none;font-weight: bold;font-family: verdana;}
+A.admin_menu:hover	{color:gray;text-decoration:none;font-weight: bold;font-family: verdana;
+}
+A.admin_menu:active	{color:black;text-decoration:none;font-weight: bold;font-family: verdana;}
+A.admin_menu:visited	{color:black;text-decoration:none;font-weight: bold;font-family: verdana;}
+ul li.a-selected{
+font-weight: bold !important;
+}

@@ -1,0 +1,46 @@
+<div id ="addUserForm"  style="display: none;">
+<div class="clientTableDiv" >
+<table class="clientTable">
+
+<thead><th>Add New User</th>
+</thead>
+<tr>
+<td>
+<form id="" style="height: 100%;" method="" action="">
+<span class="errorClass" id="errorClassAddUser"></span>
+<div class="_create_new_user" >
+<div style="font-weight: bold;font-size: 90%;margin-bottom:15px;"></div>
+	<div style="">
+		<div>
+			<label>First Name : </label><input id="firstName" name="firstName"/>
+			</div><br/>
+		<div>
+			<label>Last Name : </label><input id="lastName" name = "lastName"/>
+		 </div><br/>
+		 		<div>
+			<label>Email Id : </label><input id="emailId" name = "emailId"/>
+		 </div><br/>
+		 		<div>
+			<label>Client : </label><input id="clientId" name = "clientId" readonly="readonly"/>&nbsp;&nbsp;
+			<img title="Select client" onclick="javascript:showClientstoSelect('#add_new_user_form #clientId',populateFormData)" id="clientIcon" src="images/users.jpeg">
+		 </div><br/>
+		 		<div>
+			<label>Username : </label><input id="username" name = "username"/>
+		 </div><br/>
+		 <div>
+			<label>User Role : </label><select id="role" name = "role"></select>
+		 </div><br/>
+		 <div>
+			<label>Access Tree : </label><div id="accessNodeTree" name="accessNodes" style="display: none;"></div>
+		 </div><br/>
+
+	</div>
+			 <div style="float: left">
+			<a class="button add add_client add_user_save" style="height: 75%;" href="#">Save User</a>
+		 </div><br/>
+	</form>
+</td>
+</tr>
+</table>
+</div>
+</div>

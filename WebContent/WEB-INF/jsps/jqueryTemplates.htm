@@ -1,0 +1,68 @@
+<script type="text/javascript" src="scripts/jquery/jquery.tmpl.min.js">
+<!--
+
+//-->
+</script>
+<script id="clientTemplate" type="text/x-jquery-tmpl">
+<a class="button add add_client" id="add_client" style="height: 75%; margin-bottom: 10px;" href="#">Add Client</a>
+<div class="clientTableDiv">
+<table class="clientTable">
+
+<thead><th>S. No.</th><th>Client Name</th>
+<th>Description</th>
+<th></th>
+</thead>
+
+{{each(i,v) clients}}
+<tr class="{{= i % 2 ? 'alt' : 'odd'}}">
+  <td>${i}</td>
+<td>${name}</td>
+<td>${description}</td>
+<td><a href="javascript:void(0)">Show Templates</a></td>
+
+</tr>
+{{/each}}
+
+</table>
+</div>
+</script>
+
+<script id="tableDataTemplate" type="text/x-jquery-tmpl">
+<div class="clientTableDiv">
+<table class="clientTable">
+{{each(i,value) tableData}}
+{{if i == 0}}
+
+<thead><th>S. No.</th>
+{{each(key,val) value}}
+{{if key != 'id'}}
+<th>${val}</th>
+{{/if}}
+{{/each}}
+<th></th>
+
+</thead>
+
+{{else}}
+<tr class="{{= i % 2 ? 'alt' : 'odd'}}">
+  <td>${i}</td>
+{{each(key,val) value}}
+{{if key != 'id'}}
+<td>${val}</td>
+{{/if}}
+{{/each}}
+<td><a href="javascript:showSelectedValue('div_${value.id}_${selectorType}')">Select</a>
+
+<div id="div_${value.id}_${selectorType}" style="display:none;">
+{{each(key,val) value}}
+{{if key == 'id'}}${val}{{/if}}{{if key == displayCol}}:${val}{{/if}}
+{{/each}}
+</div></td>
+
+</tr>
+{{/if}}
+{{/each}}
+
+</table>
+</div>
+</script>
