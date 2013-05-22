@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+  <property key="ftlSavePath">
+     <value  env="lc">D:/myforms/config/ftls/templates/template/</value>
+	 <value  env="qa">Not defined</value>
+  </property>
+  <property key="ftlCommonPath">
+     <value  env="lc">D:/myforms/config/ftls/templates/common/</value>
+	 <value  env="qa">Not defined</value>
+  </property>
+  <property key="version">
+     <value  env="lc">0.0.0.1</value>
+	 <value  env="qa">Not defined</value>
+  </property>
+  <property key="myform.upload.filesize">
+     <value  env="lc">1000000</value>
+	 <value  env="qa">Not defined</value>
+  </property>
+  <property key="myform.upload.location">
+     <value  env="lc">D:/myforms/uploaded_files/</value>
+	 <value  env="qa">Not defined</value>
+  </property>
+  <property key="myform.upload_icon.default">
+     <value  env="lc">D:/myforms/uploaded_files/default/upld_img.jpg</value>
+	 <value  env="qa">Not defined</value>
+  </property>
+  
+</properties>

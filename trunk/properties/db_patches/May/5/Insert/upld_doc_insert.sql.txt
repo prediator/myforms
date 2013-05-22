@@ -1,0 +1,1 @@
+INSERT INTO system_id(id,table_name,st_val,max_val,safe_val,next_val) VALUES(5,'upld_doc',1,2147483647,10,1);

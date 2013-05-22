@@ -1,0 +1,4 @@
+-Djava.util.xmlpath=D:/myforms/config/properties/properties.xml -Djava.env=lc
+
+
+classpath : D:\myforms\config\ftls
