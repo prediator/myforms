@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MyUsers">
+<typeAlias type="com.spring.model.Login" alias="login"/>
+<typeAlias type="com.spring.model.User" alias="user"/>
+<typeAlias type="com.spring.service.bean.GrantedAuthorityImpl" alias="grantedauthority"/>
+<resultMap class="login" id="loginResultMap">
+<result property="username" column="username"/>
+<result property="password" column="password"/>
+</resultMap>
+<resultMap class="user" id="userResultMap">
+<result property="username" column="username"/>
+<result property="password" column="password"/>
+<result property="authorities" column="userid" select="MyUsers.getRolesByUserid" />
+</resultMap>
+<select id="getLoginByUsername" resultMap="loginResultMap" parameterClass = "java.lang.String">
+select username,password from login where username = #value#
+</select>
+<select id="getAllLogins" resultMap="loginResultMap" parameterClass = "java.lang.String">
+select username,password from login
+</select>
+<insert id="insertLogin" parameterClass="login">
+insert into login (username, password) values(#username#,#password#);
+</insert>
+<select id="getRolesByUserid" parameterClass="java.lang.Integer"  resultClass="grantedauthority">
+select role as authority from roles where roleid in (select distinct roleid from user_roles where userid = #value#)
+</select>
+<select id="getUserById" parameterClass="java.lang.Integer" resultMap="userResultMap">
+select userid,username,password from login where userid = #value#
+</select>
+<select id="getUserByUsername" parameterClass="java.lang.String" resultMap="userResultMap">
+select userid,username,password from login where username = #value#
+</select>
+</sqlMap>

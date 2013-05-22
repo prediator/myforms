@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="clnt">
+<typeAlias alias="client" type="com.myforms.client.Client"/>
+<resultMap class="client" id="clientResultMap">
+	<result property="clientId" column="clnt_id"/>
+	<result property="clientName" column="clnt_name"/>
+	<result property="description" column="clnt_desc"/>
+	<result property="templateList" column="clnt_id" select="template.getTemplateListByClientId"/>
+</resultMap>
+<select id="getClientById" parameterClass="java.lang.Long" resultMap="clientResultMap">
+	select clnt_id, clnt_name, clnt_desc from clnt where clnt_id = #value#
+</select>
+<select id="getAllClients" parameterClass="java.lang.Long" resultMap="clientResultMap">
+	select clnt_id, clnt_name, clnt_desc from clnt
+</select>
+<insert id="saveClient" parameterClass="client">
+INSERT INTO CLNT (clnt_id,clnt_name,clnt_desc) VALUES (#clientId#,#clientName#,#description#)
+</insert>
+</sqlMap>

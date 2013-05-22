@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="list">
+<typeAlias alias="mflist" type="com.myforms.field.List"/>
+<typeAlias alias="listvalue" type="com.myforms.field.ListValue"/>
+<resultMap class="mflist" id="listResultMap">
+	<result property="id" column="list_id" />
+	<result property="name" column="list_name" />
+	<result property="description" column="description" />
+	<result property="version" column="vrsn" />
+	<result property="createdBy" column="crtd_by" select="User.getUserById"/>
+	<result property="createdOn" column="crtd_on"/>
+	<result property="values" column="list_id" select="list.getListValuesById" />
+</resultMap>
+<resultMap class="listValue" id="listValueResultMap">
+	<result property="id" column="list_val_id" />
+	<result property="value" column="list_val" />
+</resultMap>
+<select id="getListByListId" parameterClass="java.lang.Long" resultMap="listResultMap">
+	select list_id,list_name,description,crtd_by,crtd_on,vrsn from list where list_id = #value# 
+</select>
+<select id="getListValuesById" parameterClass="java.lang.Long" resultMap="listValueResultMap">
+	select list_val_id,list_val, list_id from list_val where list_id = #value# 
+</select>
+<select id="getListByListUserId" parameterClass="java.lang.Integer" resultMap="listResultMap">
+	select list_id,list_name,description,crtd_by,crtd_on,vrsn from list where crtd_by = #value# 
+</select>
+<statement id="saveList" parameterClass="mflist">
+	insert into list (list_id,list_name,description,crtd_by,crtd_on,vrsn) values(#id#,#name#,#description#,#createdBy.userId#,#createdOn#, #version#);
+</statement>
+<statement id="saveListValue" parameterClass="listvalue">
+	insert into list_val (list_val_id,list_val, list_id ) values(#id#,#value#,#list.id#);
+</statement>
+</sqlMap>

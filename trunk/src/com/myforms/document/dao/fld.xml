@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="fld">
+<typeAlias type="com.myforms.field.Field" alias="field"/> 
+<typeAlias type="com.myforms.field.ListField" alias="listField"/>
+<typeAlias type="com.myforms.field.TextField" alias="textField"/>
+<typeAlias type="com.myforms.field.DateField" alias="dateField"/>
+<typeAlias type="com.myforms.field.RichTextField" alias="richTextField"/>
+<resultMap class="field" id="fieldResultMap">
+<result column="fld_id" property="id"/>
+<result column="fld_value" property="fieldValue"/>
+<result column="fld_type" property="fieldType"/>
+<result column="tmpl_fld_id" property="templateField" select="templateField.getTemplateFieldById"/>
+<result column="last_updtd_by" property="lastUpdatedBy" select="User.getUserById"/>
+<result column="last_updtd_on" property="lastUpdatedOn"/>
+<result column="fld_id" property="document" select="document.getPartialDocumentById"/>
+	<discriminator javaType="java.lang.String" column="fld_type">
+	<subMap  value="LIST" resultMap="listFieldResultMap"/>	
+	<subMap  value="TXT" resultMap="textFieldResultMap"/>
+	<subMap  value="NUM" resultMap="textFieldResultMap"/>
+	<subMap  value="RICHTXT" resultMap="richTextFieldResultMap"/>
+	<subMap  value="DT" resultMap="dateFieldResultMap"/>
+	</discriminator>
+	
+</resultMap>
+
+<resultMap class="field" id="partialFieldResultMap">
+<result column="fld_id" property="id"/>
+<result column="fld_value" property="fieldValue"/>
+<result column="fld_type" property="fieldType"/>
+<result column="tmpl_fld_id" property="templateField" select="templateField.getTemplateFieldById"/>
+	<discriminator javaType="java.lang.String" column="fld_type">
+	<subMap  value="LIST" resultMap="listFieldResultMap"/>	
+	<subMap  value="TXT" resultMap="textFieldResultMap"/>
+	<subMap  value="RICHTXT" resultMap="richTextFieldResultMap"/>
+	<subMap  value="DT" resultMap="dateFieldResultMap"/>
+	</discriminator>
+</resultMap>
+<resultMap id="listFieldResultMap" class="listField" extends="fieldResultMap">
+<result column="fld_id" property="id"/>
+<result column="fld_value" property="fieldValue"/>
+<result column="fld_type" property="fieldType"/>
+<result column="tmpl_fld_id" property="templateField" select="templateField.getTemplateFieldById"/>
+<result column="last_updtd_by" property="lastUpdatedBy" select="User.getUserById"/>
+<result column="last_updtd_on" property="lastUpdatedOn"/>
+<result column="fld_id" property="document" select="document.getPartialDocumentById"/>
+  <result property="fieldValues" column="fld_id" select="fld.getListValuesByFieldId"/>
+</resultMap>
+<resultMap id="textFieldResultMap" class="textField" extends="fieldResultMap">
+<result column="fld_id" property="id"/>
+<result column="fld_value" property="fieldValue"/>
+<result column="fld_type" property="fieldType"/>
+<result column="tmpl_fld_id" property="templateField" select="templateField.getTemplateFieldById"/>
+<result column="last_updtd_by" property="lastUpdatedBy" select="User.getUserById"/>
+<result column="last_updtd_on" property="lastUpdatedOn"/>
+<result column="fld_id" property="document" select="document.getPartialDocumentById"/>
+</resultMap>
+<resultMap id="dateFieldResultMap" class="dateField" extends="fieldResultMap">
+<result column="fld_id" property="id"/>
+<result column="fld_value" property="fieldValue"/>
+<result column="fld_type" property="fieldType"/>
+<result column="tmpl_fld_id" property="templateField" select="templateField.getTemplateFieldById"/>
+<result column="last_updtd_by" property="lastUpdatedBy" select="User.getUserById"/>
+<result column="last_updtd_on" property="lastUpdatedOn"/>
+<result column="fld_id" property="document" select="document.getPartialDocumentById"/>
+</resultMap>
+<resultMap id="richTextFieldResultMap" class="richTextField" extends="fieldResultMap">
+<result column="fld_id" property="id"/>
+<result column="fld_value" property="fieldValue"/>
+<result column="fld_type" property="fieldType"/>
+<result column="tmpl_fld_id" property="templateField" select="templateField.getTemplateFieldById"/>
+<result column="last_updtd_by" property="lastUpdatedBy" select="User.getUserById"/>
+<result column="last_updtd_on" property="lastUpdatedOn"/>
+<result column="fld_id" property="document" select="document.getPartialDocumentById"/>
+ <result property="dataList" column="fld_id" select="fld.getRichTextDataListByFieldId"/>
+</resultMap>
+
+<statement id="getListValuesByFieldId" parameterClass="java.lang.Integer" resultClass="java.lang.String">
+SELECT LIST_VALUE FROM TRAN_FLD_LIST WHERE FLD_ID = #value#
+</statement>
+<statement id="getRichTextDataListByFieldId" parameterClass="java.lang.Integer" resultClass="java.lang.String">
+SELECT RICH_TXT FROM TRAN_RICH_TXT WHERE FLD_ID = #value# ORDER BY SEQ 
+</statement>
+<statement id="saveField">
+INSERT INTO TRAN_FLD
+(FLD_ID, FLD_VALUE, FLD_TYPE, TMPL_FLD_ID, LAST_UPDTD_BY, LAST_UPDTD_ON, DOC_ID)
+ VALUES (#fieldId#,#fieldValue#,#fieldType#,#templateFieldId#,#updatedBy#,#updatedOn#,#documentId#)
+</statement>
+<statement id="saveListField">
+INSERT INTO TRAN_FLD_LIST
+(FLD_LIST_ID, LIST_VALUE,FLD_ID)
+ VALUES (#fieldListId#,#fieldListValue#,#fieldId#)
+</statement>
+<statement id="getFieldsByDocumentId" parameterClass="java.lang.Integer" resultMap="fieldResultMap">
+SELECT FLD_ID, FLD_VALUE, FLD_TYPE, TMPL_FLD_ID, LAST_UPDTD_BY, LAST_UPDTD_ON, DOC_ID FROM TRAN_FLD WHERE DOC_ID = #value#
+</statement>
+<statement id="getPartialFieldById" parameterClass="java.lang.Integer" resultMap="partialFieldResultMap">
+SELECT FLD_ID, FLD_VALUE, FLD_TYPE, TMPL_FLD_ID, LAST_UPDTD_BY, LAST_UPDTD_ON, DOC_ID FROM TRAN_FLD WHERE DOC_ID = #value#
+</statement>
+
+<statement id="saveRichTextField">
+INSERT INTO TRAN_RICH_TXT
+(RICH_TXT_ID, FLD_ID,RICH_TXT, SEQ)
+ VALUES (#richTextId#,#fieldId#,#richText#,#sequence#)
+</statement>
+<statement id="deleteFieldByDocId">
+DELETE  FROM  TRAN_FLD WHERE DOC_ID = #value# 
+</statement>
+<statement id="deleteFieldListByDocId">
+DELETE  FROM  TRAN_FLD_LIST WHERE FLD_ID in  (SELECT FLD_ID FROM  TRAN_FLD WHERE DOC_ID = #documentId# AND FLD_TYPE = #fieldType# )
+</statement>
+<statement id="deleteRTFieldByDocId">
+DELETE  FROM  TRAN_RICH_TXT WHERE FLD_ID in  (SELECT FLD_ID FROM  TRAN_FLD WHERE DOC_ID = #documentId# AND FLD_TYPE = #fieldType# )
+</statement>
+
+</sqlMap>

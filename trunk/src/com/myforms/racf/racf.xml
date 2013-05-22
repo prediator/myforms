@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="racf">
+<typeAlias type="com.myforms.racf.AccessType" alias="accessType"/>
+<typeAlias type="com.myforms.racf.Racf" alias="racf"/>
+
+<resultMap class="accessType" id="accessTypeResultMap">
+	<result property="accessId" column="access_id"/>
+	<result property="accessName" column="acc_name"/>
+	<result property="accessTypes" column="access_id" select="racf.getAccessTypeById"/>
+</resultMap>
+
+<resultMap class="racf" id="racfResultMap">
+	<result property="racfId" column="user_access_id"/>
+	<result property="user" column="user_id" select="User.getPartialUserById"/>
+	<result property="racfNodes" column="user_access_id" select="racf.getAccessNodes"/>
+</resultMap>
+<select id="getAllAccessTypes" resultMap="accessTypeResultMap">
+select access_id, acc_name, parent_access_id from access_type
+</select>
+<select id="getAccessTypeByName" resultMap="accessTypeResultMap">
+select access_id, acc_name, parent_access_id from access_type where acc_name = #value#
+</select>
+<select id="getAccessTypeById"  parameterClass="java.lang.Long" resultMap="accessTypeResultMap">
+select access_id, acc_name, parent_access_id from access_type where parent_access_id = #value#
+</select>
+<insert id="saveRole" parameterClass="java.util.Map">
+INSERT INTO USER_ROLES (roleid,userid) value (#roleId#,#userId#)
+</insert>
+<insert id="saveUserAcess" parameterClass="racf">
+INSERT INTO user_access (user_access_id,user_id) value (#racfId#,#user.userId#)
+</insert>
+<insert id="saveUserAcessNodes" parameterClass="java.util.Map">
+INSERT INTO user_acc_node (user_access_id,access_node) value (#racfId#,#accessNode#)
+</insert>
+</sqlMap>

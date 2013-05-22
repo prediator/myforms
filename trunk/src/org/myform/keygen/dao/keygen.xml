@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="key">
+<typeAlias alias="keygen" type="org.myform.keygen.domain.KeyHolder"/>
+<resultMap class="keygen" id="keygenResultMap">
+   <result column="id" property="keyId"/>
+   <result column="table_name" property="tableName"/>
+   <result column="st_val" property="start"/>
+   <result column="max_val" property="max"/>
+   <result column="safe_val" property="safeVal"/>
+   <result column="next_val" property="nextValue"/>
+</resultMap>
+<select id="getKeyGenByTablename" parameterClass="java.lang.String" resultMap="keygenResultMap">
+  select id,table_name,st_val,max_val,safe_val,next_val from system_id where table_name = #value#
+</select>
+<statement id="updateKeygen" parameterClass="java.util.Map">
+  update  system_id set next_val = #newValue#  where table_name = #tableName#
+</statement>
+
+</sqlMap>
