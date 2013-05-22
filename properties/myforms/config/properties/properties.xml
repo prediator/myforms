@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+  <property key="ftlSavePath">
+     <value  env="lc">C:/myforms/config/ftls/templates/template/</value>
+	 <value  env="qa">Not defined</value>
+  </property>
+  <property key="ftlCommonPath">
+     <value  env="lc">C:/myforms/config/ftls/templates/common/</value>
+	 <value  env="qa">Not defined</value>
+  </property>
+  <property key="version">
+     <value  env="lc">0.0.0.1</value>
+	 <value  env="qa">Not defined</value>
+  </property>
+</properties>
