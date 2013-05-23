@@ -142,9 +142,9 @@ public class CreateandSaveFTLServiceImpl implements CreateandSaveFTLService {
 		Matcher matcher = pattern.matcher(xml);
 		xml = matcher.replaceFirst("");
 		xml = editImport +xml;
-		if(template.getUploadDocEnabled()){
+		//if(template.getUploadDocEnabled()){
 			//xml = xml + MyFormsConstants.TemplateXMLConstants.UPLOAD_DOWNLOAD_DOCUMENT;
-		}
+		//}
 		xml =  header + xml + footer; 
 		String filePath = PropertyEditor.getInstance().getProperty(MyFormsConstants.TemplateXMLConstants.FTL_SAVE_PATH )+ 
 							filename + MyFormsConstants.FileExtensions.FTL;
