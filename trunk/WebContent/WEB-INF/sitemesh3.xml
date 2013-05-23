@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemesh>
+  <mapping path="/edit*" decorator="/decorator.jsp"/>
+  <mapping path="/read*" decorator="/decorator.jsp"/>
+  <mapping path="/createHtmlDoc*" decorator="/decoratorRichText.jsp"/>
+  <mapping path="/refresh*" decorator="/decorator.jsp"/>
+  <mapping path="/home*" decorator="/decoratorHome.jsp"/>
+  <mapping path="/createUpdateTemplate*" decorator="/templateDecorator.jsp"/>
+</sitemesh>
