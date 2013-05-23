@@ -1,5 +1,5 @@
 package com.spring.model;
-
+@Deprecated
 public class Login {
 String username;
 String password;

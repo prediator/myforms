@@ -25,7 +25,15 @@
 				http://www.springframework.org/schema/security/spring-security-3.0.3.xsd">
             <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"/> <!-- Controller -->
             
-<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" >
+<property name="interceptors">
+		<list>
+		 <ref bean="menuProcessorInterceptor"/>
+		  <ref bean="conditionProcessorInterceptor"/>
+		  
+		</list>
+		</property>
+</bean>
     <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
         <context:component-scan base-package="com.myforms" />
 <!-- ========================= VIEW DEFINITIONS ========================= -->
@@ -55,8 +63,6 @@
 		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">
 		<value>
-		/login.html=loginController	
-		/home.html=homeController	
 		/refreshTemplate.html=refreshTemplateController	
 		/createUpdateTemplate.html=templateFormController	
 		</value>
@@ -83,18 +89,32 @@
 		</property>
      </bean>
 
-     <bean name="loginController" class="com.springfirst.simplecontroller.HomeController">
+    <!--  
+    Remove unwanted controller
+    
+    <bean name="loginController" class="com.springfirst.simplecontroller.HomeController">
 			<property name="commandClass" value="com.spring.model.Login"/>
 			<property name="commandName" value="login"/>		
 			<property name="loginService" ref="loginService"/>
 			<property name="authenticationManager" ref="authenticationManager"/>
 			<property name="createFetchTemplateServiceManager" ref="createFetchTemplateServiceManager"/>
-	</bean>
+	</bean> -->
+	    <!-- 
+	    Converted to annoted controller
+	    <bean name="loginController" class="com.springfirst.simplecontroller.SimpleLoginFormController">
+			<property name="commandClass" value="com.spring.model.Login"/>
+			<property name="commandName" value="login"/>		
+			<property name="loginService" ref="loginService"/>
+			<property name="authenticationManager" ref="authenticationManager"/>
+			<property name="createFetchTemplateServiceManager" ref="createFetchTemplateServiceManager"/>
+	</bean>  -->
+    <!-- 
+    NO Longer Used
      <bean name="homeController" class="com.springfirst.simplecontroller.SimpleLoginFormController">
 			<property name="loginService" ref="loginService"/>
 			<property name="saveUsersServiceManager" ref="saveUsersServiceManager"/>	
 			<property name="createFetchTemplateServiceManager" ref="createFetchTemplateServiceManager"/>
-	</bean>
+	</bean> -->
 	<bean name="refreshTemplateController" class="com.myforms.template.web.ftl.RefreshFTLsController">
 			<property name="createandSaveFTLService" ref="createandSaveFTLService"/>
 			<property name="createFetchTemplateServiceManager" ref="createFetchTemplateServiceManager"/>
@@ -121,6 +141,7 @@
 			<property name="formView" value="template"/>
 			<property name="validator" ref="templateFormaValidator"/>
 	</bean>
+	<bean id="loginValidator" class="com.myforms.web.validator.login.SimpleLoginValidator"/>
 <!-- Custom property editor -->
 <!--<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
   <property name="customEditors">
