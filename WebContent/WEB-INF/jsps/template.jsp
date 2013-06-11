@@ -10,9 +10,15 @@
 <head>
 <%@include file="ui.jsp" %>
 <link rel="stylesheet" href="./styles/template.css" type="text/css" media="all" />
-
+<script type="text/javascript" src="scripts/jquery/jquery.tmpl.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	renderAllFields();
+});
+</script>
   </head>
   <body>
+  
   <div id="edit-fld-seetings" title="Field Settings" style="display:none;">
 	<div class = 'div_fld_row'><span class='fs_fld'>Field Label :</span><input type="text" id="fs_fld_label"></div>
 	<div class = 'div_fld_row'><span class='fs_fld'>Field Help Text :</span><input type="text" id="fs_fld_help"></div>
@@ -68,8 +74,8 @@ $(document).ready(function() {
          		<div class = 'div_fld_row'>	 <span class='fs_fld'><input type="checkbox" id="uploadDocEnabled" name="uploadDocEnabled" class="ts_txt checkbox"/>Enable upload document section? </span></div>
          		 
           </div>
-          <div id = "fldtray">
-          <div class="item" id="i1">           
+          <div id = "fldtray" class="_allfieldcontainer">
+          <!-- <div class="item" id="i1">           
               <div class = 'txt'>	
 				<div>
 					<label><span  class='fldLabel'>Label</span><span title="Help Text" class="help">&nbsp;&nbsp;&nbsp;
@@ -84,7 +90,7 @@ $(document).ready(function() {
 				<span style="display: none;" class="TXT_isEnabled" >false</span>		
 			   </div>
              <label class="title">Text Box</label>              
-          </div>
+          </div> -->
 
           <div class="item" id="i2">
               <div class="lst" id="div_MyList">
@@ -154,14 +160,57 @@ $(document).ready(function() {
 <div id='templ_title'></div>
 </td></tr></table>
               <table id="cart_items" class="back" style="width: 100%;vertical-align: top;">
+              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
               </table>
           </div>
           
           
       </div>
-      </td><td>&nbsp;</td>
+      </td><td class="field_settings">
+      <div style="margin-bottom: 28px;margin-left:20px;" id="cart_title">
+         <div style="padding-right: 7px;">
+            <span>Additional Field settings </span>         
+          </div>          
+      </div>
+      <div id="item_container" style="margin-left:20px;width:220px !important;padding-left: 10px;padding-top: 15px;">
+      <div class="_field_setting_div _common" style="display: none;">
+      	<label>Field View :</label> <span> 
+      	<select id="field_view" disabled="disabled">
+      		<option value="classical" selected>
+      			Classical view
+      		</option>
+      		<option value="singlerow">
+      			Single row view
+      		</option>
+      	</select></span>
+      </div>
+            <div class="_field_setting_div RADIO" style="display: none;">
+      		<label>Add options :</label> <span> 
+      		<table class="add_settings_table add_settings_radio">
+      			<tr>      		
+      				<td class="td15">
+      					<input type="radio" class="add_settings_rd">
+      				</td>
+      				<td>
+      					<input type="text" class="add_settings_fld"/>
+      				</td>
+      				<td class="_add_radio_val">
+      					<img src="./images/plus.jpeg"/>
+      				</td>
+      				<td class="_delete_radio_val">
+      					<img src="./images/delete.jpg"/>
+      				</td>
+      		</tr>
+      		
+      		</table>
+      		
+      		   		</span>
+      </div>
+      </div>
+      </td>
       </tr></table>
      <jsp:include flush="true" page="createlist.jsp"/>
+     <jsp:include flush="true" page="templateFields.htm"></jsp:include>
   </body>
   
 </html>

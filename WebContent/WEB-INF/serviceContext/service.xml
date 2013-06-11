@@ -87,5 +87,7 @@
   <bean id="racfService" class="com.myforms.racf.service.RacfServiceImpl">
   	 <property name="racfDao" ref="racfDao"/>
   </bean>
-	
+	<bean id="documentHistoryService" class="com.myforms.history.service.DocumentHistoryServiceImpl">
+  	 <property name="documentHistoryDao" ref="documentHistoryDao"/>
+  </bean>
 </beans>

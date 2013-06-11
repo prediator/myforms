@@ -111,6 +111,75 @@ public String getClientData(){
 	}	
 	return array.toString();
 }
+/**
+ * 
+ * @return
+ */
+@RequestMapping(value= "/clientTemplateFieldData.html")
+@ResponseBody
+public String getClientTemplateFieldData(Integer templateId){
+	Template template = findTemplate(templateId);
+	JSONObject object = new JSONObject();
+	if(template != null){
+		template = createFetchTemplateServiceManager.getTemplateById(templateId);
+		if(template.getTemplateFieldMap() != null){		
+			for(String key : template.getTemplateFieldMap().keySet()){
+				object.put(key, template.getTemplateFieldMap().get(key).getFieldTitle());
+			}
+		}
+	}
+	return object.toString();
+}
+/**
+ * 
+ * @return
+ */
+@RequestMapping(value= "/clientTemplateData.html")
+@ResponseBody
+public String getClientTemplateData(){
+	JSONArray array = new JSONArray();
+	JSONObject header = new JSONObject();
+	header.put(MyFormsConstants.JsonFieldNames.Template.TEMPLATE_ID, "0");
+	header.put(MyFormsConstants.JsonFieldNames.Template.TEMPLATE_NAME, "Template Name");
+	header.put(MyFormsConstants.JsonFieldNames.Template.TEMPLATE_TITLE, "Title");
+	header.put(MyFormsConstants.JsonFieldNames.Template.TEMPLATE_DESCRIPTION,"Description");
+	
+	array.add(header);
+	array = clientTemplateToJason(array);
+	return array.toString();
+}
+/**
+ * 
+ * @return
+ */
+private JSONArray clientTemplateToJason(JSONArray templatesArray){
+	if(templatesArray == null)
+	 templatesArray = new JSONArray();
+	User user= MyFormProperties.getInstance().getCurrentUser();
+	
+	List<Template> templates = user.getClient().getTemplateList();
+	
+	for(Template template : templates){
+		JSONObject templateJson = new JSONObject();
+		templateJson.put(MyFormsConstants.JsonFieldNames.Template.TEMPLATE_ID, template.getTemplateId());
+		templateJson.put(MyFormsConstants.JsonFieldNames.Template.TEMPLATE_NAME, template.getTemplateName());
+		templateJson.put(MyFormsConstants.JsonFieldNames.Template.TEMPLATE_TITLE, template.getTemplateTitle());
+		templateJson.put(MyFormsConstants.JsonFieldNames.Template.TEMPLATE_DESCRIPTION, template.getDescription());
+		templatesArray.add(templateJson);
+	}
+	return templatesArray;
+} 
+private Template findTemplate(Integer templateId){
+User user= MyFormProperties.getInstance().getCurrentUser();
+	
+	List<Template> templates = user.getClient().getTemplateList();
+	
+	for(Template template : templates){
+	if(template.getTemplateId().equals(templateId));
+		return template;
+	}
+	return null;
+}
 public CreateFetchTemplateServiceManager getCreateFetchTemplateServiceManager() {
 	return createFetchTemplateServiceManager;
 }

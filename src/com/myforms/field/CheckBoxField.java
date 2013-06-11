@@ -1,13 +1,5 @@
 package com.myforms.field;
 
-public class CheckBoxField {
-private Boolean booleanValue;
+public class CheckBoxField extends BooleanField{
 
-public Boolean getBooleanValue() {
-	return booleanValue;
-}
-
-public void setBooleanValue(Boolean booleanValue) {
-	this.booleanValue = booleanValue;
-}
 }

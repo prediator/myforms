@@ -18,8 +18,7 @@ public class SaveUpdateTemplateServiceManagerImpl implements SaveUpdateTemplateS
 	}
 
 	public void updateTemplate(Template template) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 }

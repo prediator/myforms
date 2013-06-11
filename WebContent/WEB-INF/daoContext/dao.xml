@@ -75,4 +75,8 @@
 		<property name="sqlMapClient" ref="sqlMapClient"/>	
 		<property name="keyGenerator" ref="keyGenerator"></property>			
 	</bean>
+	<bean id="documentHistoryDao" class="com.myforms.history.dao.DocumentHistoryIBatis">
+		<property name="sqlMapClient" ref="sqlMapClient"/>	
+		<property name="keyGenerator" ref="keyGenerator"></property>			
+	</bean>
 </beans>

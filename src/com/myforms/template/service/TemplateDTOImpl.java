@@ -143,12 +143,14 @@ public class TemplateDTOImpl implements TemplateDTO {
 						rowNum++;
 						colNum = 0;
 					}
+					int colSpan = Integer.valueOf(columnMetaData.getFieldProperties().get(MyFormsConstants.TemplateConstants.COL_SPAN));
+					int rowSpan = Integer.valueOf(columnMetaData.getFieldProperties().get(MyFormsConstants.TemplateConstants.ROW_SPAN));
 					Element td = addTrTdElements(tr,"td",
-							 Integer.valueOf(columnMetaData.getFieldProperties().get(MyFormsConstants.TemplateConstants.ROW_SPAN)),
-									 Integer.valueOf(columnMetaData.getFieldProperties().get(MyFormsConstants.TemplateConstants.COL_SPAN)));
+							rowSpan,
+							 colSpan);
 					Element fld = td.addElement("FIELD");
 					fld.addAttribute("NAME",columnMetaData.getFieldProperties().get(MyFormsConstants.TemplateConstants.FIELD_NAME));
-					colNum++;
+					colNum +=colSpan;
 					if(colNum == 3){
 						colNum = 0;
 						rowNum ++;
@@ -160,7 +162,7 @@ public class TemplateDTOImpl implements TemplateDTO {
 		}
         template.setRenderXml(rootElement.asXML());
 	}
-	private Element addTrTdElements(Element root, String tag, int colspan,int rowspan){
+	private Element addTrTdElements(Element root, String tag,int rowspan, int colspan){
 		Element element = root.addElement(tag) ;
 		if(MyFormsConstants.TemplateXMLConstants.TD.equalsIgnoreCase(tag))
 		{

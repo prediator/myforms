@@ -15,10 +15,13 @@ public class ConditionProcessorInterceptor extends HandlerInterceptorAdapter {
 @Override
 public void postHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, ModelAndView model) throws Exception {
 	MyFormsLogger.getLogger().info("Adding conditions");
-	Document document = (Document)model.getModel().get(MyFormsConstants.DocumentConstants.DOCUMENT);
-	if(document != null)
-	ConditionUtil.processConditions(document);
-	model.getModel().put(MyFormsConstants.DocumentConstants.DOCUMENT,document);
+	if(model != null){
+		Document document = (Document)model.getModel().get(MyFormsConstants.DocumentConstants.DOCUMENT);
+		if(document != null)
+			ConditionUtil.processConditions(document);
+		model.getModel().put(MyFormsConstants.DocumentConstants.DOCUMENT,document);
+	}
+	
 	super.postHandle(arg0, arg1, arg2, model);
 	MyFormsLogger.getLogger().debug("Conditions Added");
 	MyFormsLogger.getLogger().info("Conditions Added");

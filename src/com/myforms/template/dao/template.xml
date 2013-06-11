@@ -18,7 +18,7 @@
 	<result property="uploadDocEnabled" column="UPLD_DOC_ENABLED" />
 	<result property="version" column="VRSN" />
 	<result property="createdBy" column="CREATED_BY" select="User.getUserById" />
-	<result property="parentTemplate" column="PARENT_ID" select="User.getUserById"/>
+	<result property="parentTemplate" column="PARENT_ID" select="template.getPartialTemplateById"/>
 	<result property="templateFieldList"  column="TMPL_ID" select="templateField.getTemplateFieldMapByTemplateId"/>
 </resultMap>
 <resultMap class="template" id="partialTemplateResultMap">
@@ -27,6 +27,11 @@
 	<result property="templateTitle" column="TITLE" />
 	<result property="version" column="VRSN" />
 	<result property="description" column="DESCRIPTION" />
+</resultMap>
+<resultMap class="template" id="tinyTemplateResultMap">
+	<result property="templateId" column="TMPL_ID" />
+	<result property="templateName" column="TMPL_NAME" />
+	<result property="version" column="VRSN" />
 </resultMap>
 <insert id="saveTemplate" parameterClass="template">
  INSERT INTO TMPL (
@@ -100,7 +105,7 @@ SELECT 	TMPL_ID,
 	SPRING.TMPL 	
 	WHERE TMPL_ID = #value#
 </select>
-<select id="getPartialTemplateById" parameterClass="java.lang.Integer" resultMap="partialTemplateResultMap">
+<select id="getPartialTemplateById" parameterClass="java.lang.Integer" resultMap="tinyTemplateResultMap">
 	SELECT 	TMPL_ID, 
 		TMPL_NAME, 
 		VRSN	 

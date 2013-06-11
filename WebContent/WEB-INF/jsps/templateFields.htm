@@ -1,0 +1,35 @@
+<script id="fieldTypeTemplate" type="text/x-jquery-tmpl">
+{{each(i,v) fields}}
+<div class="item" id="i${i}">           
+              <div class = '${fieldType}'>	
+				<div>
+					<label><span  class='fldLabel'>Label</span><span title="Help Text" class="help">&nbsp;&nbsp;&nbsp;
+						<span class="fldRequired" style="color:red;display:none;">*</span>
+							<div>&nbsp;</div>
+						</span>
+					</label>
+				</div>	
+				{{if htmlType == 'select'}}
+				
+				<select class="slt" value="" name="" id="lstfld" disabled="disabled">			
+				  <option value="A">
+				  A</option>
+				  <option value="B">
+				  B</option>
+				  <option value="C">
+				  C</option>
+				</select>	
+				{{else}}
+				<input class="fldTxt" type="${htmlType}" value="" name="" id="txtfld" disabled="disabled">
+				{{if htmlType == 'radio' || htmlType == 'checkbox' }}
+ 					<span class="fldLabel _fld-label">Value</span>
+				{{/if}}	
+				{{/if}}
+				<span style="display: none;" class="__fld_type_"  >${fieldType}</span>	
+				<span style="display: none;" class="${fieldType}_isVisible" >false	</span>
+				<span style="display: none;" class="${fieldType}_isEnabled" >false</span>		
+			   </div>
+             <label class="title">${description}</label>              
+          </div>
+{{/each}}
+</script>

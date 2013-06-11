@@ -233,20 +233,31 @@ border-style: solid;
             drop: function(event, ui) {
                 var item = ui.draggable.html();
                 var itemid = ui.draggable.attr("id");
-                var html = '<div class="item icart">';
+                var html = '<div class="item icart" onclick="showAdditionalSettings(this)">';
                 html = html + '<div class="divrm">';
+                html = html + '<a onclick="collapseField(this ,'+ total_items+')" style="display:none;" class="collapse_fld fldset"><img src="./images/collapse_row.gif" title="Collapse Field"/></a>';
+                html = html + '<a onclick="expandField(this ,'+ total_items+')" class="expand_fld fldset"><img src="./images/expand_row.gif" title="Expand to occupy full row"/></a>';
                 html = html + '<a onclick="editSettings(this ,'+ total_items+')" class="fldset">Settings</a>';
                 html = html + '<a onclick="remove(this)" class="remove '+itemid+'">&times;</a>';
                 html = html + '<div/>'+item+'</div>';
                 
 
                 // update total items
-                
-                if(total_items%3 == 0){
+                var totalChild = 0;
+                var totalTd = 0;
+                $('#cart_items tr:last').children().each(function(){
+                	if($(this).children().length >0)
+                		{
+                			totalChild += ($(this).attr('colspan')? parseInt($(this).attr('colspan')) : 1);
+                			totalTd +=1;
+                		}
+                });
+                if(totalChild == 3 || totalChild ==0){
                    var tr = '<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>';
                    $("#cart_items").append(tr);
+                   totalTd = 0;
                 }
-                var tdIndex = total_items%3;
+                var tdIndex = totalTd;
                 //alert(tdIndex)
                 var td = $('#cart_items tr:last').children()[tdIndex].innerHTML  = html;
                 
@@ -278,6 +289,8 @@ border-style: solid;
         $("#btn_clear").click(function() {
             $("#cart_items").fadeOut("2000", function() {
                $(this).html("").fadeIn("fast").css({left: 0});
+               var tr = '<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>';
+               $("#cart_items").append(tr);
             });
             $("#citem").html("0");
             $("#cprice").html("$ 0");
@@ -313,14 +326,24 @@ border-style: solid;
         $(el).hide();
         $(el).parent().parent().effect("highlight", {color: "#ff0000"}, 1000);
         $(el).parent().parent().fadeOut('1000');
+        var tr= $(el).parents('tr:first');
         setTimeout(function() {
             $(el).parent().parent().remove();
             // collapse cart items
             if (total_items > 3) {
                 //$("#cart_items").animate({width: "-=120"}, 'slow');
             }
+            var childs=0;
+            $(tr).children().each(function(){
+            	if($(this).children().length >0)
+            		{
+            			childs++;
+            		}
+            });
+            if(childs==0)
+            	$(tr).remove();
         }, 1100);
-
+       
         // update total item
         total_items--;
         $("#citem").html(total_items);

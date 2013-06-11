@@ -86,6 +86,9 @@ ddaccordion.init({
 	<li class="mainmenuli">
 		<img style="margin-right: 3px;"  src="images/ar.jpeg"/><a href="#" class="admin_menu div_fld_row_list" onclick="openCreateListModalDialog();">Template Lists</a>
 	</li>
+	<li class="mainmenuli">
+	<img style="margin-right: 3px;"  src="images/ar.jpeg"/><a href="#" class="admin_menu doc_history">Manage Document History</a>
+	</li>
 	</ul>
 	</div>
 <div class="silverheader"><a class='mn_itm' href="#" >User management</a></div>
@@ -120,6 +123,7 @@ ddaccordion.init({
 	<p><a href="#" onclick="refreshFtls()">Click Here</a> to refresh all ftls</p>
 </div>
 </div>
+<jsp:include flush="true" page="docHistoryConfig.jsp"/>
 <jsp:include flush="true" page="createlist.jsp"/>
 <jsp:include flush="true" page="jqueryTemplates.htm"></jsp:include>
 <jsp:include flush="true" page="newUser.htm"></jsp:include>

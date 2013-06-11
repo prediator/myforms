@@ -40,7 +40,7 @@ ${document.template.templateName!""} - ${document.displayId!"--"}
 </div></td>
 </tr></table>
 <div class="doc_errors"></div>
-<table><tr>
+<table width="90%"><tr>
 <td style="width:70%;vertical-align :top;">
 <div id="tabs">
 	<ul>

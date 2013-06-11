@@ -12,6 +12,7 @@ import com.ibatis.sqlmap.client.SqlMapExecutor;
 import com.myforms.batch.QueryBatch;
 import com.myforms.constants.MyFormsConstants;
 import com.myforms.field.ListValue;
+import com.myforms.field.config.model.FieldType;
 import com.myforms.usergroup.model.User;
 
 public class TemplateFieldDaoIBatis extends SqlMapClientDaoSupport implements TemplateFieldDao {
@@ -58,4 +59,8 @@ public class TemplateFieldDaoIBatis extends SqlMapClientDaoSupport implements Te
             return -1;
         }
     }
+	
+	public List<FieldType> getCongigurableFields(){
+		return  (List<FieldType>)getSqlMapClientTemplate().queryForList("templateField.getConfigurableFieldTypes", 1);
+	}
 }

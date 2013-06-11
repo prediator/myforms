@@ -70,6 +70,17 @@ public class TemplateFieldFormController {
 		returnVal.put("name", templateList.getName());
 		return returnVal.toString();
 	}
+	
+	/**
+	 * This method will return all configured field for client associated with logged in USER.
+	 * @return
+	 */
+	@RequestMapping(value = "/getTemplateFieldTypes.html")
+	@ResponseBody
+	public String getAllConfiguredFields(){
+		JSONArray array = JSONArray.fromObject(templateFieldManager.getCongigurableFields());
+		return array.toString();
+	}
 	/**
 	 * 
 	 * @author Family
