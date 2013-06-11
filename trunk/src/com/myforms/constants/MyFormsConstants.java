@@ -67,6 +67,17 @@ public String NA = "N/A";
 		public String DATE = "DT";
 		public String NUMBER = "NUM";
 	}
+	public Map<String, String> HtmlFieldType = new HashMap<String, String>(){{
+		put(MyFormsConstants.FieldType.TEXT, "text");
+		put(MyFormsConstants.FieldType.LIST, "select");
+		put(MyFormsConstants.FieldType.RADIO, "radio");
+		put(MyFormsConstants.FieldType.CHECKBOX, "checkbox");
+		put(MyFormsConstants.FieldType.LABEL, "label");
+		put(MyFormsConstants.FieldType.PASSWORD, "text");
+		put(MyFormsConstants.FieldType.RICH_TEXT, "textarea");
+		put(MyFormsConstants.FieldType.DATE, "text");
+		put(MyFormsConstants.FieldType.NUMBER, "text");
+	}};
 	public interface FieldId{
 		public int TEXT = 1;
 		public int LIST = 2;

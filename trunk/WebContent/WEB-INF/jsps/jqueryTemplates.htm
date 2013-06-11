@@ -35,7 +35,7 @@
 
 <thead><th>S. No.</th>
 {{each(key,val) value}}
-{{if key != 'id'}}
+{{if key != idCol}}
 <th>${val}</th>
 {{/if}}
 {{/each}}
@@ -47,15 +47,15 @@
 <tr class="{{= i % 2 ? 'alt' : 'odd'}}">
   <td>${i}</td>
 {{each(key,val) value}}
-{{if key != 'id'}}
+{{if key != idCol}}
 <td>${val}</td>
 {{/if}}
 {{/each}}
-<td><a href="javascript:showSelectedValue('div_${value.id}_${selectorType}')">Select</a>
+<td><a href="javascript:showSelectedValue('div_${value[idCol]}_${selectorType}')">Select</a>
 
-<div id="div_${value.id}_${selectorType}" style="display:none;">
+<div id="div_${value[idCol]}_${selectorType}" style="display:none;">
 {{each(key,val) value}}
-{{if key == 'id'}}${val}{{/if}}{{if key == displayCol}}:${val}{{/if}}
+{{if key == idCol}}${val}{{/if}}{{if key == displayCol}}:${val}{{/if}}
 {{/each}}
 </div></td>
 

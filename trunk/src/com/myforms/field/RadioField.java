@@ -1,5 +1,5 @@
 package com.myforms.field;
 
-public class RadioField {
+public class RadioField  extends BooleanField{
 
 }

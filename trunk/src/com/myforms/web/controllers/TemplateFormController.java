@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindException;
@@ -18,9 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.myforms.client.Client;
 import com.myforms.constants.MyFormsConstants;
 import com.myforms.template.config.model.Template;
 import com.myforms.template.config.model.TemplateMetaData;
+import com.myforms.template.service.ftl.CreateandSaveFTLService;
 import com.myforms.util.MyFormProperties;
 /**
  * This class is responsible to save/update templates.
@@ -29,7 +32,12 @@ import com.myforms.util.MyFormProperties;
  */
 @Controller
 public class TemplateFormController extends AbstractTemplateFormController{
-	
+
+	/**
+	 * 
+	 */
+	@Autowired
+private CreateandSaveFTLService createandSaveFTLService;
 	/**
 	 * 
 	 */
@@ -55,7 +63,20 @@ protected ModelAndView onSubmit(HttpServletRequest req, HttpServletResponse res,
 	TemplateMetaData templateMetaData = (TemplateMetaData)object;
 	Template template = getTemplateDTO().transferToTemplate(templateMetaData); 
 	saveUpdateTemplateServiceManager.saveTemplate(template);
+	createandSaveFTLService.createFTLFromTemplate(template);
+	Client client =  MyFormProperties.getInstance().getCurrentUser().getClient();
+
+	if(client != null && client.getTemplateList() != null)
+		client.getTemplateList().add(template);
+	
 	return new ModelAndView(new RedirectView("createUpdateTemplate.html"));
+}
+public CreateandSaveFTLService getCreateandSaveFTLService() {
+	return createandSaveFTLService;
+}
+public void setCreateandSaveFTLService(
+		CreateandSaveFTLService createandSaveFTLService) {
+	this.createandSaveFTLService = createandSaveFTLService;
 }
 
 }

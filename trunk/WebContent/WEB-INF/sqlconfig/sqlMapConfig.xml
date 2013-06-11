@@ -19,4 +19,5 @@
 <sqlMap resource="com\myforms\common\notes.xml"/>
 <sqlMap resource="com\myforms\createdoc\dao\richTextDoc.xml"/>
 <sqlMap resource="com\myforms\racf\racf.xml"/>
+<sqlMap resource="com\myforms\history\historyTemplateConfig.xml"/>
 </sqlMapConfig>

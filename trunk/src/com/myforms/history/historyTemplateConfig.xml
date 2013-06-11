@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="historyTemplateConfig">
+<typeAlias type="com.myforms.history.HistoryTemplateField" alias="historyTemplateField"/>
+<resultMap class="historyTemplateField" id="hstrTmplResultMap">
+	<result property="templateId" column="tmpl_id" />
+	<result property="id" column="hstr_tmpl_fld_id" />
+	<result property="fieldNames"  column="hstr_tmpl_fld_id" select="historyTemplateField.getAllFieldNames" />
+	<result property="createdDate" column="dt_crt" />	
+</resultMap>
+<insert id="insertHistoryConfigFields" parameterClass="historyTemplateField">
+	insert into table hstr_tmpl_fld (hstr_tmpl_fld_id,tmpl_id,dt_crt  ) values (#id#,#templateId#,#createdDate#)
+</insert>
+<insert id="insertHistoryConfigFieldNames" parameterClass="java.util.Map">
+	insert into table hstr_tmpl_fld_nm (hstr_tmpl_fld_nm_id, hstr_tmpl_fld_id, fld_nm  ) values (#id#,#historyConfigFldId#,#fieldName#)
+</insert>
+<select id="getHistoryFieldConfigByTmplId" parameterClass="java.lang.Long" resultMap="hstrTmplResultMap">
+	select hstr_tmpl_fld_id,tmpl_id,dt_crt from  hstr_tmpl_fld where tmpl_id = #value#
+</select>
+<select id="getAllFieldNames" resultClass="java.lang.String">
+	select fld_nm from hstr_tmpl_fld_nm where hstr_tmpl_fld_id = #value#
+</select>
+</sqlMap>

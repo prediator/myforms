@@ -1,15 +1,39 @@
-div.txt{
+div.TXT{
 
 height: 60px;
 width: 120px;
 text-align: left;
 
 }
-.lst{
+
+.LIST{
 height: 60px;
 width: 120px;
 text-align: left;
 }
+.RADIO{
+
+height: 50px;
+width: 120px;
+text-align: left;
+
+}
+.RADIO input{
+float: left;
+width: 15px;
+}
+.CHKBOX{
+
+height: 50px;
+width: 120px;
+text-align: left;
+
+}
+.CHKBOX input{
+float: left;
+width: 15px;
+}
+
 div.div_fld_row{
 padding-top: 10px;
 float: left;
@@ -26,7 +50,7 @@ width: 110px;
 text-align: left;
 }
 .fldTxt{
-height: 20px;
+/*height: 20px;*/
 width: 110px;
 text-align: left;
 }
@@ -85,4 +109,27 @@ cursor: pointer;
 #edit-fld-seetings{
 font-size: 70%;
 padding: 10px;
+}
+#cart_items{
+	height : 300px;
+}
+td.field_settings{
+	margin-left:30px;
+	vertical-align: top;
+}
+table.add_settings_table{
+	width:100px;
+}
+
+input.add_settings_rd{
+	width: 15px;
+}
+input.add_settings_fld{
+	width: 90px;
+}
+td.td15{
+	width: 15px;
+}
+._field_setting_div img{
+	cursor: pointer;
 }

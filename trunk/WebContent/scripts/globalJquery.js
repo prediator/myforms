@@ -46,9 +46,10 @@
 		$( "#dialog:ui-dialog" ).dialog( "destroy" );
 		$( "#dialog:ui-dialog" ).attr("display","block");
 		$( "#create-doc" ).dialog({
-			height: 600,
-			width:800,
-			modal: true
+			height: 540,
+			width:700,
+			modal: true,
+			position: 'center'
 		});
 		$('#crt_doc_ifrm').attr('src',"createHtmlDoc.html?documentId="+id+"&richTextDocId="+rtid);	
 	}
@@ -173,7 +174,61 @@ if(fldPrefix == 'LIST'){
 		}
 	}
 }
-
+expandField  = function(set, num){
+ var tr = $(set).parents('tr:first');
+ var td = $(set).parents('td:first');
+ var ind = tr.children().index(td);
+ var cspan = 1;
+ var i = ind+1;
+ 
+ {
+	var remtd = tr.children()[i]; 
+	var html = $(remtd).children().length;
+	if(html <=0){
+		cspan = cspan + ($(td).attr('colspan')? parseInt($(td).attr('colspan')) : 1);
+		$(remtd).remove();
+	}
+	
+ }
+ td.attr('colspan', cspan);
+ if(!isNextAvailable(td))
+	 {
+	 $(set).hide();
+	 $(set).siblings('.collapse_fld').show();
+	 }
+}
+isNextAvailable = function(td){
+	if($(td).next() == undefined || !$(td).next() || $(td).next().length == 0|| $(td).next().children().length>0){
+		return false;
+	}
+	else
+		return true;
+}
+collapseField = function(set, index1){
+	 var tr = $(set).parents('tr:first');
+	 var td = $(set).parents('td:first');
+	 var ind = tr.children().index(td);
+	 
+	 var count = tr.children().length;
+	 var colspan = ($(td).attr('colspan')? parseInt($(td).attr('colspan')) : 1);
+	 if(colspan > 1){
+		 colspan = colspan -1; 
+		 td.attr('colspan', colspan);
+		 tr.append('<td>&nbsp;</td>');
+	 }
+	 if(colspan == 1){
+		 $(set).hide();
+		 $(set).siblings('.expand_fld').show();
+	 }
+	 
+}
+isPrvAvailable = function(td){
+	if($(td).prev() == undefined || !$(td).prev() || $(td).prev().length == 0|| $(td).next().children().length>0){
+		return false;
+	}
+	else
+		return true;
+}
 $(document).ready(function() {
 	$('.save_fld_tmpl__').click(function(){
 
@@ -251,7 +306,7 @@ var selectedList = ".LIST_List_Selected";
 			 continue;
 			}
 			var nm = getName(_i,_j,'csan');
-			addElement(form,nm,1);
+			addElement(form,nm,getColSpan(td));
 			
 			nm = getName(_i,_j,'rsan');
 			addElement(form,nm,1);			
@@ -497,6 +552,28 @@ $.ajax({
 		  }
 	});
 }
+populateTemplateFieldData = function(){
+	var id = $('#doc_history_con #templateIdVal').val();
+	id = id.substring(0, id.indexOf(':'));
+	$.ajax({
+			  type : "GET",
+	          url:'clientTemplateFieldData.html?templateId='+id,
+			  success: function(result){
+			  	var data = {};
+			  	data = $.parseJSON(result);
+			  	//var roles = data['roles'];
+			  	$('#doc_history_con #historyFields').empty();
+			  	$.each(data, function(i,val){
+			  	 $('<option value="'+i+'">'+val+'</option>').appendTo( $('#doc_history_con #historyFields'));
+			  	});
+			  	//var nodes = getCompleteTree();
+			  	createTree(data['accessTypes']);
+			  },
+			  error:function(){
+				  alert("error in populating clients.");
+			  }
+		});
+}
 createTree = function(nodes){
 $('#add_new_user_form #accessNodeTree').empty();
 		$("#add_new_user_form #accessNodeTree").dynatree({
@@ -518,7 +595,7 @@ $.ajax({
           url:'clientsData.html',
 		  success: function(result){
 			var data = jQuery.parseJSON(result);
-			$( "#tableDataTemplate" ).tmpl( {tableData : data,displayCol : "name",selectorType : 'client'}).appendTo( "#tableDataDiv" );
+			$( "#tableDataTemplate" ).tmpl( {tableData : data,displayCol : "name",selectorType : 'client',  idCol: 'id'}).appendTo( "#tableDataDiv" );
 			$('#tableDataDiv').dialog('open');
 			$('#tableDataDiv').show();
 		  },
@@ -527,6 +604,24 @@ $.ajax({
 		  }
 	});
 }		
+showTemplatetoSelect = function(fld, callback){
+	$('#tableDataDiv').empty();
+	$('#tableDataDiv').bind( "callback", callback );
+	$('#tableDataDiv').attr('custom_fld_id',fld);
+	$.ajax({
+			  type : "GET",
+	          url:'clientTemplateData.html',
+			  success: function(result){
+				var data = jQuery.parseJSON(result);
+				$( "#tableDataTemplate" ).tmpl( {tableData : data,displayCol : "templateName",selectorType : 'template', idCol: 'templateId'}).appendTo( "#tableDataDiv" );
+				$('#tableDataDiv').dialog('open');
+				$('#tableDataDiv').show();
+			  },
+			  error:function(){
+				  alert("error in populating clients.");
+			  }
+		});
+	}	
 showSelectedValue = function (ele){
 var value = $.trim($('#'+ele).text());
 $($('#tableDataDiv').attr('custom_fld_id')).val(value);
@@ -556,3 +651,97 @@ $('#errorClassAddUser').html("User Saved successfully.");
 else
 $('#errorClassAddUser').html("Some Server error occured. Unable to save user.");
 }
+
+renderAllFields = function(){
+	$.ajax({
+		  type : "GET",
+        url:'getTemplateFieldTypes.html',
+		  success: function(result){
+		  var data = {};
+		  data['fields'] = $.parseJSON(result);
+		  $( "._allfieldcontainer" ).empty();
+		  $( "#fieldTypeTemplate" ).tmpl( data).appendTo( "._allfieldcontainer" );
+		  $(".item").draggable({
+	            revert: true            
+	        });
+		//  $(".item").on('click', showAdditionalSettings); 
+		  },
+		  error:function(){
+			  alert("error in populating clients.");
+		  }
+	});
+	
+}
+showAdditionalSettings = function(el){
+	$('._field_setting_div').hide();
+	var type = $.trim($(el).find('.__fld_type_').html());
+	$('td.field_settings').find('.'+type).show();
+	$('td.field_settings').find('._common').show();
+	$('._fs_current').removeClass('_fs_current');
+	$(el).parents('td:first').addClass('_fs_current');
+	
+	var cspan = ($(el).parents('td:first').attr('colspan')? parseInt($(el).parents('td:first').attr('colspan')) : 1);
+	
+	if(cspan >1){
+		$('#field_view').removeAttr('disabled');
+	}
+	else{
+		$('#field_view').attr('disabled','disabled');
+	}
+	if(type == 'RADIO'){
+		setupRadioCheckboxes(el, type);
+	}
+}
+setupRadioCheckboxes = function(el, type){
+	var radio = $(el).parents('td:first').find('input[type="radio"]');
+	var lbls = $(el).parents('td:first').find('._fld-label');
+	
+	var tr = $('table.add_settings_table').find('tr:first');
+	$('table.add_settings_table').empty();
+	
+	$(radio).each(function(i, fld){
+		var lbl = lbls[i];		
+		var row = $(tr).clone();
+		row.find('input[type="radio"]').attr('checked', $(radio).attr('checked'));
+		row.find('input[type="text"]').val($(lbl).text());
+		row.appendTo($('table.add_settings_table'));
+		$(row).find('._add_radio_val').on('click',addNewFieldRow);
+		$(row).find('._delete_radio_val').on('click',deletFieldRow);
+	});
+}
+
+addNewFieldRow = function(){
+	var clone = $(this).parent().clone();
+	$(clone).find('input').val('');
+	$(clone).find('input').removeAttr('checked');
+	$(this).parent().after($(clone));
+	
+	$(clone).find('._add_radio_val').on('click',addNewFieldRow);
+	$(clone).find('._delete_radio_val').on('click',deletFieldRow);
+	
+}
+deletFieldRow = function(){
+	$(this).parent().remove();
+}
+getColSpan= function(etd){
+	return ($(etd).attr('colspan')? parseInt($(etd).attr('colspan')) : 1);
+}
+showDocHistoryConfig =  function(){
+	$('.admin_panel_content').empty();
+	$('.admin_panel_content').html($('#docHistoryConfig').clone());
+	$('.admin_panel_content #docHistoryConfig form').attr('id', 'doc_history_con');
+	$('.admin_panel_content #docHistoryConfig').show();
+	$('.admin_panel_content #docHistoryConfig').find('input').val('');
+	$('.admin_panel_content #docHistoryConfig .docHistoryConfig_save').on('click', saveDocHistoryConfig);
+}
+saveDocHistoryConfig = function(){
+	var id =  $('#doc_history_con').find('#templateIdVal').val().substring(0, $('#doc_history_con').find('#templateIdVal').val().indexOf(':'));
+	$('#doc_history_con #templateId').val(id);
+	$.ajax({url : "saveHistoryFieldConfig.html",type: "POST", data: $('#doc_history_con').serialize(), success : function(data){
+		alert(data);
+	}
+	});
+}
+$(document).ready(function(){
+	$('.doc_history').on('click',showDocHistoryConfig);
+});
