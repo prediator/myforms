@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="HealthPartners-IFP" default="copyMyFiles" basedir=".">
+	<!-- Set properties -->	
+	<target name="copyMyFiles" description="Copies the files from the source directory to the server directory" >
+		<copy todir="E:\MyFolder\tomcat6\webapps\MyForms\WEB-INF\classes"  description="Copy Class files">
+			  <fileset dir="E:\MyFolder\MyWorkspace\MyForms\build\classes" />
+		</copy>
+		<copy todir="E:\MyFolder\tomcat6\webapps\MyForms\scripts\"  description="Copy Class files" >
+				<fileset dir="E:\MyFolder\MyWorkspace\MyForms\WebContent\scripts\" />
+		</copy>
+		<copy todir="E:\MyFolder\tomcat6\webapps\MyForms\styles\"  description="Copy Class files" >
+						<fileset dir="E:\MyFolder\MyWorkspace\MyForms\WebContent\styles\" />
+				</copy>
+		<copy todir="E:\MyFolder\tomcat6\webapps\MyForms\images\"  description="Copy Class files" >
+								<fileset dir="E:\MyFolder\MyWorkspace\MyForms\WebContent\images\" />
+						</copy>
+		<copy todir="E:\MyFolder\tomcat6\webapps\MyForms\WEB-INF\jsps"  description="Copy Class files" >
+						<fileset dir="E:\MyFolder\MyWorkspace\MyForms\WebContent\WEB-INF\jsps" />
+				</copy>
+	</target>	
+</project>
