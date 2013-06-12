@@ -3,11 +3,14 @@ package com.myforms.dao;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.orm.ibatis.SqlMapClientCallback;
 import org.springframework.orm.ibatis.SqlMapClientTemplate;
 
 import com.ibatis.sqlmap.client.SqlMapExecutor;
 import com.myforms.batch.QueryBatch;
+import com.myforms.exception.runtimeexception.BatchExcutorException;
 
 public class DaoUtil {
 private DaoUtil(){}
@@ -26,7 +29,7 @@ public static int executeBatch(final List<QueryBatch> queries, SqlMapClientTempl
         return updateCount.intValue();
         }
     catch (Exception e ) {
-        return -1;
+        throw new BatchExcutorException(e);
     }
 }
 }

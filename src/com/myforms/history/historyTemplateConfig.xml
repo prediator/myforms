@@ -7,14 +7,14 @@
 <resultMap class="historyTemplateField" id="hstrTmplResultMap">
 	<result property="templateId" column="tmpl_id" />
 	<result property="id" column="hstr_tmpl_fld_id" />
-	<result property="fieldNames"  column="hstr_tmpl_fld_id" select="historyTemplateField.getAllFieldNames" />
+	<result property="fieldNames"  column="hstr_tmpl_fld_id" select="historyTemplateConfig.getAllFieldNames" />
 	<result property="createdDate" column="dt_crt" />	
 </resultMap>
 <insert id="insertHistoryConfigFields" parameterClass="historyTemplateField">
-	insert into table hstr_tmpl_fld (hstr_tmpl_fld_id,tmpl_id,dt_crt  ) values (#id#,#templateId#,#createdDate#)
+	insert into  hstr_tmpl_fld (hstr_tmpl_fld_id,tmpl_id,dt_crt  ) values (#id#,#templateId#,#createdDate#)
 </insert>
 <insert id="insertHistoryConfigFieldNames" parameterClass="java.util.Map">
-	insert into table hstr_tmpl_fld_nm (hstr_tmpl_fld_nm_id, hstr_tmpl_fld_id, fld_nm  ) values (#id#,#historyConfigFldId#,#fieldName#)
+	insert into  hstr_tmpl_fld_nm (hstr_tmpl_fld_nm_id, hstr_tmpl_fld_id, fld_nm  ) values (#id#,#historyConfigFldId#,#fieldName#)
 </insert>
 <select id="getHistoryFieldConfigByTmplId" parameterClass="java.lang.Long" resultMap="hstrTmplResultMap">
 	select hstr_tmpl_fld_id,tmpl_id,dt_crt from  hstr_tmpl_fld where tmpl_id = #value#
@@ -22,4 +22,10 @@
 <select id="getAllFieldNames" resultClass="java.lang.String">
 	select fld_nm from hstr_tmpl_fld_nm where hstr_tmpl_fld_id = #value#
 </select>
+<delete id="deleteHistoryConfiguration" parameterClass="java.lang.Long">
+	delete from hstr_tmpl_fld where hstr_tmpl_fld_id = #value#
+</delete>
+<delete id="deleteHistoryConfigurationNames" parameterClass="java.lang.Long">
+	delete from hstr_tmpl_fld_nm where hstr_tmpl_fld_id = #value#
+</delete>
 </sqlMap>

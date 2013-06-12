@@ -8,7 +8,7 @@
 <td>
 <form id="" style="height: 100%;" method="" action="">
 <div style="float: left">
-			<a class="button add add_client docHistoryConfig_save" style="height: 75%;" href="#">Save User</a>
+			<a class="button add add_client docHistoryConfig_save" style="height: 75%;" href="#">Save</a><br/><br/><br/>
 		 </div>
 <span class="errorClass" id="errorClassAddUser"></span>
 <div class="doc_history_con" >
@@ -17,6 +17,7 @@
 			<div>
 			<label>Template : </label><input id="templateIdVal" name = "templateIdVal" readonly="readonly"/>
 			<input id="templateId" name = "templateId" type="hidden"/>&nbsp;&nbsp;
+			<input id="id" name = "id" type="hidden"/>
 			<img title="Select client" onclick="javascript:showTemplatetoSelect('#doc_history_con #templateIdVal',populateTemplateFieldData)" id="templateIcon" src="images/template.jpg">
 		 </div>
 		 <div>
