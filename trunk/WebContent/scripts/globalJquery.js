@@ -563,10 +563,17 @@ populateTemplateFieldData = function(){
 			  	data = $.parseJSON(result);
 			  	//var roles = data['roles'];
 			  	$('#doc_history_con #historyFields').empty();
-			  	$.each(data, function(i,val){
+			  	$.each(data.result, function(i,val){
 			  	 $('<option value="'+i+'">'+val+'</option>').appendTo( $('#doc_history_con #historyFields'));
 			  	});
 			  	//var nodes = getCompleteTree();
+			  	if(data.historyTemplateField && data.historyTemplateField.id){
+			  		$('#doc_history_con #id').val(data.historyTemplateField.id);
+			  		$('#doc_history_con #templateId').val(data.historyTemplateField.templateId);
+			  	}
+			  	$.each(data.historyTemplateField.fieldNames, function(i,val){
+			  		$('#doc_history_con #historyFields option[value="'+val+'"]').attr('selected','selected');
+			  	});
 			  	createTree(data['accessTypes']);
 			  },
 			  error:function(){
@@ -738,7 +745,12 @@ saveDocHistoryConfig = function(){
 	var id =  $('#doc_history_con').find('#templateIdVal').val().substring(0, $('#doc_history_con').find('#templateIdVal').val().indexOf(':'));
 	$('#doc_history_con #templateId').val(id);
 	$.ajax({url : "saveHistoryFieldConfig.html",type: "POST", data: $('#doc_history_con').serialize(), success : function(data){
-		alert(data);
+		var data = jQuery.parseJSON(data);
+		if(data != null && data != undefined && data.id != null && data.id != undefined){
+			
+			$('#doc_history_con #id').val(data.id);
+			$('#doc_history_con .errorClass').html("Configuration has been saved successfully.");
+		}
 	}
 	});
 }

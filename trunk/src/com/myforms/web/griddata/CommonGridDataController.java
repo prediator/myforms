@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.myforms.client.Client;
 import com.myforms.constants.MyFormsConstants;
 import com.myforms.document.service.CreateFetchDocumentServiceManager;
+import com.myforms.history.HistoryTemplateField;
+import com.myforms.history.service.DocumentHistoryService;
 import com.myforms.template.config.model.Template;
 import com.myforms.template.service.CreateFetchTemplateServiceManager;
 import com.myforms.usergroup.model.User;
@@ -33,6 +35,8 @@ public class CommonGridDataController {
 	private CreateFetchDocumentServiceManager createFetchDocumentServiceManager;
 	@Autowired
 	private UserGroupService userGroupService;
+	@Autowired(required=true)
+	private DocumentHistoryService documentHistoryService;
 	
 	@RequestMapping(value = "/templateData.html")
 	@ResponseBody
@@ -120,6 +124,7 @@ public String getClientData(){
 public String getClientTemplateFieldData(Integer templateId){
 	Template template = findTemplate(templateId);
 	JSONObject object = new JSONObject();
+	JSONObject result = new JSONObject();
 	if(template != null){
 		template = createFetchTemplateServiceManager.getTemplateById(templateId);
 		if(template.getTemplateFieldMap() != null){		
@@ -128,7 +133,12 @@ public String getClientTemplateFieldData(Integer templateId){
 			}
 		}
 	}
-	return object.toString();
+	if(templateId != null && templateId.intValue() != 0){
+		HistoryTemplateField historyTemplateField = documentHistoryService.getHistoryTemplateField(templateId.longValue());
+		result.put("historyTemplateField", historyTemplateField);
+	}
+	result.put("result", object);
+	return result.toString();
 }
 /**
  * 

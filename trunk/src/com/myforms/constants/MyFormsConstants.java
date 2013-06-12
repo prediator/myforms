@@ -237,6 +237,8 @@ public String NA = "N/A";
 		public String USER_ROLES = "user_roles";
 		public String USER_ACCESS = "user_access";
 		public String USER_ACCESS_NODE = "user_acc_node";
+		public String HISTORY_CONF_FLD = "hstr_tmpl_fld";
+		public String HISTORY_CONF_FLD_NM = "hstr_tmpl_fld_nm";
 	}
 	public interface PageGroup{
 		String KEY = "MENU_GROUP_KEY";
