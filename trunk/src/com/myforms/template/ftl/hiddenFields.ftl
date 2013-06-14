@@ -1,1 +1,2 @@
-<input type="hidden" name="documentId" id="documentId" value='${document.id!""}'/>
+<input type="hidden" name="documentId" id="documentId" <#if document.id?exists>value='${document.id?c!""}' </#if>/>
+<input type="hidden" name="templateId" id="templateId" value='${document.template.templateId?c!""}'/>

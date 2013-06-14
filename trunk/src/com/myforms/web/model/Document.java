@@ -35,7 +35,7 @@ private Map<String, Field> fieldMap = new HashMap<String, Field>();
 private boolean isDirty;
 private List<FileUploadInfo> uploadedItems;
 private List<RichTextDoc> richTextDocs;
-public boolean isDirty() {
+public Boolean isDirty() {
 	Iterator<Field> iter = fieldMap.values().iterator();
 	if(iter.hasNext()){
 		Field field = iter.next();
@@ -45,7 +45,7 @@ public boolean isDirty() {
 	}
 	return isDirty;
 }
-public void setDirty(boolean isDirty) {
+public void setDirty(Boolean isDirty) {
 	this.isDirty = isDirty;
 }
 public User getCreatedBy() {

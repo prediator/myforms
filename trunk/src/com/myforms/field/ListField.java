@@ -20,7 +20,8 @@ public List<String> getFieldValues() {
 public void setFieldValues(List<String> fieldValues) {
 	this.fieldValues = fieldValues;
 }
-public String toString(){
+@Override
+	public String getFieldValue() {
 	StringBuilder val = new StringBuilder();
 	String rv = null;
 	if( !CollectionUtils.isEmpty(fieldValues)){
@@ -33,5 +34,8 @@ public String toString(){
 	 }
 	}
 	return rv;
+	}
+public String toString(){
+	return getFieldValue();
 }
 }

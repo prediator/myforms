@@ -91,7 +91,7 @@ none;
 	<#if field.list?exists>
 	<#assign lst = field.list>
 	</#if>
-	<#if lst?exists>
+	<#if lst?exists &&  lst.values?exists>
 	<#assign listVal = lst.values>
 	</#if>
 	

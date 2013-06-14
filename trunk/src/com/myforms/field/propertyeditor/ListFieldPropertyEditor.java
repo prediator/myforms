@@ -4,6 +4,8 @@ import java.beans.PropertyEditorSupport;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import com.myforms.constants.MyFormsConstants;
 import com.myforms.field.Field;
 import com.myforms.field.ListField;
@@ -24,6 +26,7 @@ public void setAsText(String text) throws IllegalArgumentException {
 	{
 		list.add(val);
 	}
+	field.setDirty(isEqual(list, field.getFieldValues()));
 	field.setFieldValues(list);
 	field.setFieldType(MyFormsConstants.FieldType.LIST);
 	setValue(field);
@@ -32,5 +35,11 @@ public void setAsText(String text) throws IllegalArgumentException {
 public String getAsText() {
 	ListField field = (ListField)getValue();
 	return field.getFieldValue();
+}
+public boolean isEqual(List<String> list1,List<String> list2){
+	if(list1 == null || list2 == null)
+		return true;
+	
+	return CollectionUtils.isEqualCollection(list1, list2);
 }
 }

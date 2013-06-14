@@ -754,6 +754,39 @@ saveDocHistoryConfig = function(){
 	}
 	});
 }
+showDocumentHistory = function(){
+	var params = {};
+	params.documentId = $('#form').find('#documentId').val();
+	params.templateId = $('#form').find('#templateId').val();
+	$.get('getDocumentHistory.html', params, function(result){
+		var data = jQuery.parseJSON(result);
+		var table =  $('#form #clientTableDiv .clientTable');
+		$('#form #clientTableDiv .clientTable').empty();
+		$('#form #clientTableDiv .clientTable').css('border-style','solid');
+		$('#form #clientTableDiv .clientTable').css('border-width','1px');
+		$('#form #clientTableDiv .clientTable').css('border-color','#AAA');
+		var tr = $("<tr style=\"background:url('../images/ui-bg_highlight-soft_75_cccccc_1x100.png') repeat-x scroll 50% 50% #CCCCCC;\"'></tr>").appendTo(table);
+		var body = $("<tr style='border-top-style:solid;border-top-width:1px;border-top-color:#AAA'></tr>");
+		
+		$.each(data[0], function(key, value){
+			$('<th style="padding:5px;">'+value+'</th>').appendTo(tr);
+			$('<td style="padding:5px;" id="'+key+'">--</td>').appendTo(body);
+		});
+		
+		$.each(data, function(i, row){
+			if(i == 0)
+				return;	
+			var r =body.clone();
+			$(r).appendTo(table);
+			$.each(row, function(key, value){
+				$(r).find('#'+key).html(value);				
+			});
+		});
+		$('#form #clientTableDiv .clientTable tr:odd').css('background-color','#eee');
+		//table.html(data);
+	});
+}
 $(document).ready(function(){
 	$('.doc_history').on('click',showDocHistoryConfig);
+	$('#_document-history-tab').on('click',showDocumentHistory);
 });

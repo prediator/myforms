@@ -4,12 +4,25 @@
     "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 <sqlMap namespace="historyTemplateConfig">
 <typeAlias type="com.myforms.history.HistoryTemplateField" alias="historyTemplateField"/>
+<typeAlias type="com.myforms.history.DocumentHistory" alias="documentHistory"/>
+
 <resultMap class="historyTemplateField" id="hstrTmplResultMap">
 	<result property="templateId" column="tmpl_id" />
 	<result property="id" column="hstr_tmpl_fld_id" />
 	<result property="fieldNames"  column="hstr_tmpl_fld_id" select="historyTemplateConfig.getAllFieldNames" />
 	<result property="createdDate" column="dt_crt" />	
 </resultMap>
+
+<resultMap class="documentHistory" id="documentHistoryResultMap">
+	<result property="id" column="hstr_id" />
+	<result property="templateFieldId" column="fld_id" />
+	<result property="fieldValue"  column="hstr_val" />
+	<result property="fieldType" column="fld_type" select="templateField.getFieldTypeById" />	
+	<result property="updatedOn" column="crt_dt" />	
+	<result property="updatedBy" column="updt_by" select="User.getPartialUserById"/>	
+	<result property="document" column="doc_id" select="document.getPartialDocumentById"/>
+</resultMap>
+
 <insert id="insertHistoryConfigFields" parameterClass="historyTemplateField">
 	insert into  hstr_tmpl_fld (hstr_tmpl_fld_id,tmpl_id,dt_crt  ) values (#id#,#templateId#,#createdDate#)
 </insert>
@@ -28,4 +41,10 @@
 <delete id="deleteHistoryConfigurationNames" parameterClass="java.lang.Long">
 	delete from hstr_tmpl_fld_nm where hstr_tmpl_fld_id = #value#
 </delete>
+<insert id="insertDocumentHistroy" parameterClass="documentHistory">
+	insert into  hstr_doc (hstr_id,fld_id,hstr_val,fld_type,crt_dt ,updt_by, doc_id  ) values (#id#,#templateFieldId#,#fieldValue#,#fieldType.fieldTypeId#,#updatedOn#,#updatedBy.userId#,#document.id#)
+</insert>
+<select id="getDocumentHistory" resultMap="documentHistoryResultMap" parameterClass="java.lang.Long">
+    select hstr_id,fld_id,hstr_val,fld_type,crt_dt ,updt_by, doc_id from hstr_doc where doc_id = #value#
+</select>
 </sqlMap>

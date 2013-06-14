@@ -19,6 +19,7 @@ public void setAsText(String text) throws IllegalArgumentException {
 	Field field = (NumberField)getValue();
 	if(StringUtils.isEmpty(text))
 		text  = null;
+	field.setDirty(!StringUtils.equals(text, field.getFieldValue()));
 	field.setFieldType(MyFormsConstants.FieldType.NUMBER);
 	field.setFieldValue(text);
 	setValue(field);

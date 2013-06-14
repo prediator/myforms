@@ -30,6 +30,8 @@
 	</bean>	
 	<bean id="saveUpdateDocumentServiceManager" class="com.myforms.document.service.SaveUpdateDocumentServiceManagerImpl">
 		<property name="saveUpdateDocumentDao" ref="saveUpdateDocumentDao"/>	
+		<property name="documentHistoryService" ref="documentHistoryService"/>
+		<property name="createFetchDocumentServiceManager" ref="createFetchDocumentServiceManager"/>
 	</bean>	
 	<bean id="createFetchTemplateServiceManager" class="com.myforms.template.service.CreateFetchTemplateServiceManagerImpl">
 		<property name="createFetchTemplateDao" ref="createFetchTemplateDao"/>	

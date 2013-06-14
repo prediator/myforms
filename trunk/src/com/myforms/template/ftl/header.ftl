@@ -45,11 +45,14 @@ ${document.template.templateName!""} - ${document.displayId!"--"}
 <div id="tabs">
 	<ul>
 		<li><a href="#tabs-1">Document</a></li>
-		<li><a href="#tabs-2" >History</a></li>
+		<li><a href="#tabs-2" id="_document-history-tab" >History</a></li>
 		<li><a href="#tabs-3" id="anchor-tab-3">Document Notes</a></li>
 	</ul>
 	
-	<div id="tabs-2">	   
+	<div id="tabs-2" id="_history-container">
+	<div id="clientTableDiv">
+	<table cellspacing=0 class="clientTable" style="width: 100%; text-align: left;"> </table>
+	</div>	   
 	</div>
 	<div id="tabs-3">
 	</div>
