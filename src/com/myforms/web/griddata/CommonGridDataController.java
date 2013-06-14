@@ -2,7 +2,9 @@ package com.myforms.web.griddata;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.SortedSet;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.myforms.client.Client;
 import com.myforms.constants.MyFormsConstants;
 import com.myforms.document.service.CreateFetchDocumentServiceManager;
+import com.myforms.history.DocumentHistory;
 import com.myforms.history.HistoryTemplateField;
 import com.myforms.history.service.DocumentHistoryService;
 import com.myforms.template.config.model.Template;
@@ -179,6 +182,11 @@ private JSONArray clientTemplateToJason(JSONArray templatesArray){
 	}
 	return templatesArray;
 } 
+/**
+ * 
+ * @param templateId
+ * @return
+ */
 private Template findTemplate(Integer templateId){
 User user= MyFormProperties.getInstance().getCurrentUser();
 	
@@ -190,6 +198,84 @@ User user= MyFormProperties.getInstance().getCurrentUser();
 	}
 	return null;
 }
+/**
+ * 
+ * @return
+ */
+@RequestMapping(value="/getDocumentHistory.html")
+@ResponseBody
+public String getDocumentHistory(Long documentId, Long templateId){
+	List<DocumentHistory> documentHistories = documentHistoryService.getDocumentHistory(documentId);
+	JSONArray array = prepareDocumentHistory(documentHistories, templateId);
+	return array.toString();
+}
+/**
+ * 
+ * @param documentHistories
+ * @param templateId 
+ * @return
+ */
+private JSONArray prepareDocumentHistory(
+		List<DocumentHistory> documentHistories, Long templateId) {
+	HistoryTemplateField historyTemplateField = documentHistoryService.getHistoryTemplateField(templateId);
+	JSONArray array = new JSONArray();
+	if(historyTemplateField == null)
+		return array;
+	
+	JSONObject historySetup = prepareHeader(historyTemplateField, templateId);
+	JSONObject hstr = (JSONObject)historySetup.get("names");
+	JSONObject id = (JSONObject)historySetup.get("id");
+	hstr.put("UPDATED_BY", "Updated By");
+	hstr.put("UPDATED_ON", "Updated On");
+	array.add(hstr);
+	Date date = null;
+	JSONObject jsonObject = null;
+	if(documentHistories != null && hstr.size() > 2){
+		for(DocumentHistory documentHistory : documentHistories){
+			if(date != null && !documentHistory.getUpdatedOn().equals(date))
+				array.add(jsonObject);
+			if(date == null || !documentHistory.getUpdatedOn().equals(date)){
+				date = documentHistory.getUpdatedOn();
+				jsonObject = new JSONObject();
+				jsonObject.put("UPDATED_BY", MyFormProperties.getInstance().getCurrentUser().getName());
+				jsonObject.put("UPDATED_ON", MyFormsConstants.SIMPLE_DATE_FORMAT.format(date));
+				
+			}
+			if(documentHistory.getUpdatedOn().equals(date)){
+				jsonObject.put(id.get(String.valueOf(documentHistory.getTemplateFieldId())), documentHistory.getFieldValue());
+			}
+		}
+		if(jsonObject != null && !array.contains(jsonObject))
+			array.add(jsonObject);
+	}
+	return array;
+}
+/**
+ * 
+ * @param historyTemplateField
+ * @param templateId
+ * @return
+ */
+private JSONObject prepareHeader(HistoryTemplateField historyTemplateField,
+		Long templateId) {
+	Template tmpl = createFetchTemplateServiceManager.getTemplateById(templateId.intValue());
+	JSONObject historySetup = new JSONObject();
+	JSONObject names = new JSONObject();
+	JSONObject id = new JSONObject();	
+	if(historyTemplateField.getFieldNames()  != null && tmpl.getTemplateFieldMap() !=null)
+	{
+		for(String fld : historyTemplateField.getFieldNames()){
+			if(tmpl.getTemplateFieldMap().containsKey(fld)){
+				names.put(fld, tmpl.getTemplateFieldMap().get(fld).getFieldTitle());
+				id.put(String.valueOf(tmpl.getTemplateFieldMap().get(fld).getFieldId()), fld);
+			}
+		}
+	}
+	historySetup.put("names", names);
+	historySetup.put("id", id);
+	return historySetup;
+}
+
 public CreateFetchTemplateServiceManager getCreateFetchTemplateServiceManager() {
 	return createFetchTemplateServiceManager;
 }

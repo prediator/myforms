@@ -1,5 +1,7 @@
 package com.myforms.constants;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -239,6 +241,7 @@ public String NA = "N/A";
 		public String USER_ACCESS_NODE = "user_acc_node";
 		public String HISTORY_CONF_FLD = "hstr_tmpl_fld";
 		public String HISTORY_CONF_FLD_NM = "hstr_tmpl_fld_nm";
+		public String DOCUMENT_HISTORY = "hstr_doc";
 	}
 	public interface PageGroup{
 		String KEY = "MENU_GROUP_KEY";
@@ -282,4 +285,5 @@ public String NA = "N/A";
 	public String DATE_FORMAT = "MM/dd/yyyy";
 	public int RT_DATA_LENTGH = 999;
 	public String CLIENT_ACCESS_NODE = "Client";
+	public DateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
 }

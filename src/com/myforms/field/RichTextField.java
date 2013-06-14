@@ -18,4 +18,11 @@ public List<String> getDataList() {
 public void setDataList(List<String> dataList) {
 	this.dataList = dataList;
 }
+/**
+ * Never update history of rich text fields	
+ */
+@Override
+	public Boolean isDirty() {
+		return false;
+	}
 }

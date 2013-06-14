@@ -33,7 +33,8 @@ http://www.springframework.org/schema/security/spring-security-3.0.3.xsd">
         <intercept-url pattern="/saveUser.html" access="ROLE_SUPERVISOR" />
         <intercept-url pattern="/getTemplateFieldTypes.html" access="ROLE_SUPERVISOR" />
         <intercept-url pattern="/clientTemplateData.html" access="ROLE_SUPERVISOR" />
-        <intercept-url pattern="/clientTemplateFieldData" access="ROLE_SUPERVISOR" />
+        <intercept-url pattern="/clientTemplateFieldData.html" access="ROLE_SUPERVISOR" />
+        <intercept-url pattern="/getDocumentHistory.html" access="ROLE_SUPERVISOR, ROLE_USER" />
  		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <logout/>
          <remember-me/>

@@ -18,7 +18,7 @@ private String fieldType;
 private Date lastUpdatedOn;
 private User lastUpdatedBy;
 private Document document;
-private boolean isDirty;
+private Boolean isDirty;
 
 public Document getDocument() {
 	return document;
@@ -27,11 +27,13 @@ public void setDocument(Document document) {
 	this.document = document;
 }
 
-public boolean isDirty() {
+public Boolean isDirty() {
+	if(isDirty == null)
+		return false;
 	return isDirty;
 }
-public void setDirty(boolean isDirty) {
-	if(isDirty){
+public void setDirty(Boolean isDirty) {
+	if(isDirty !=null && isDirty && this.document !=null){
 	this.document.setDirty(isDirty);
 	}
 	this.isDirty = isDirty;
