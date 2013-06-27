@@ -7,6 +7,7 @@ import org.myform.keygen.dao.KeyGeneratorAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ibatis.support.SqlMapClientDaoSupport;
 
+import com.myforms.anonymous.ClientSetupInfo;
 import com.myforms.client.Client;
 import com.myforms.constants.MyFormsConstants;
 import com.myforms.usergroup.model.Role;
@@ -52,6 +53,14 @@ public class UserGroupDaoIBatis  extends SqlMapClientDaoSupport  implements User
 
 	public User getPartialUserByUserName(String username) {
 		return (User)getSqlMapClientTemplate().queryForObject("User.getPartialUserByUsername", username);
+	}
+/**
+ * 
+ */
+	@Override
+	public void saveAnonymousClientSetupInfo(ClientSetupInfo clientSetupInfo) {
+		clientSetupInfo.setId(keyGenerator.generateKey(MyFormsConstants.Tables.CLIENTSETUP).longValue());
+		getSqlMapClientTemplate().insert("clnt.saveAnonymousClient",clientSetupInfo);
 	}
 	
 }

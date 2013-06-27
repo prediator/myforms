@@ -1,5 +1,6 @@
 package com.myforms.web.validator;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.util.StringUtils;
@@ -16,15 +17,15 @@ public abstract class AbstractFieldValidator implements FieldValidator, Cloneabl
 		throw new CloneNotSupportedException("This class/sublclass doesnot support cloning");	
 	}
 	public void validate(List<Field> fields, Document document, Errors errors) {
-		validateRequiredFields(fields,document,errors);
+		validateRequiredFields(fields != null?fields:Collections.EMPTY_LIST,document,errors);
 
 	}
-	public void validateRequiredFields(List<Field> fields, Document document, Errors errors){
+	protected void validateRequiredFields(List<Field> fields, Document document, Errors errors){
 		for(Field field : fields){
 			validateRequiredField(field,document,errors);
 		}
 	}
-	public void validateRequiredField(Field field, Document document, Errors errors){
+	protected void validateRequiredField(Field field, Document document, Errors errors){
 		TemplateField templateField = document.getTemplate().
 										getTemplateFieldMap().get(field.getTemplateField().getFieldName());
 		if(templateField.getIsRequired()){

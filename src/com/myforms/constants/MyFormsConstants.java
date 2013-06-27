@@ -106,6 +106,7 @@ public String NA = "N/A";
 		public String DOCUMENT_NOT_FOUND = "Document with display id {0} Not Found!! <br/> Please Report error to system admin.<br/>Thanks";
 		public String DOCUMENT_CONCURRENT_UPDATE_EXCEPTION = "Document has been update by some other user!!";
 		public String DOCUMENT_UPDATE_EXCEPTION = "Some problem occured while updating the document.<br/>Please try later.";
+		public String INVALID_FIELD_TYPE_EXCEPTION = "Invalid field type.";
 
 	}
 	public interface ParamsName{
@@ -161,6 +162,7 @@ public String NA = "N/A";
 		public String SAVE_TEMPLATE = "template.saveTemplate";
 		public String SAVE_CLNT_TMPL = "template.saveClientTemplate";
 		public String SAVE_TEMPLATE_FLD = "templateField.saveTemplateField";
+		public String SAVE_BOOLEAN_VALUE= "templateField.insertBooleanValues";
 	}
 	public interface JsonFieldNames{
 
@@ -242,6 +244,9 @@ public String NA = "N/A";
 		public String HISTORY_CONF_FLD = "hstr_tmpl_fld";
 		public String HISTORY_CONF_FLD_NM = "hstr_tmpl_fld_nm";
 		public String DOCUMENT_HISTORY = "hstr_doc";
+		public String BOOLEAN_VALUE = "fld_bl_vl";
+		public String SELECTED_BOOLEAN_VALUE = "tran_fld_bl_vl";
+		public String CLIENTSETUP = "anms_clnt";
 	}
 	public interface PageGroup{
 		String KEY = "MENU_GROUP_KEY";
@@ -265,6 +270,8 @@ public String NA = "N/A";
 		public String HELP_TEXT = "helpText";
 		public String SELECTED_LIST = "selectedList";
 		public String FIELD_NAME = "fldName";
+		public String BOOL_SELECTED = "selected";
+		public String BOOL_FIELD = "field";
 	}
 	public interface RacfConstants{
 		String NODE_SEPARATOR=".";

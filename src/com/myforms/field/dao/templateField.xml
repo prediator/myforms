@@ -5,11 +5,20 @@
 <sqlMap namespace="templateField">
 <typeAlias type="com.myforms.field.config.model.TemplateField" alias="templateField"/>
 <typeAlias type="com.myforms.field.config.model.FieldType" alias="fieldtype"/>
-<resultMap class="fieldtype" id="fieldtypeResultMap">
+<typeAlias type="com.myforms.field.config.model.BooleanValue" alias="booleanValue"/>
+<resultMap class="fieldtype" id="fieldtypeResultMap">	
 	<result property="fieldTypeId" column="fld_type_id" />
 	<result property="fieldType" column="fld_type" />
 	<result property="description" column="fld_desc" />
 	<result property="configurable" column="configurable" />
+</resultMap>
+<resultMap class="booleanValue" id="boolValueResultMap">
+<result property="id" column="id" />
+	<result property="value" column="val" />
+	<result property="displayName" column="dname" />
+	<result property="templateFieldId" column="tmpl_fld_id" />
+	<result property="selected" column="selected" />
+	<result property="order" column="ordr" />
 </resultMap>
 <resultMap class="templateField" id="partialTemplateFieldResultMap">
 	<result property="fieldId" column="FLD_ID" />
@@ -45,6 +54,7 @@
 	<result property="createdBy" column="CREATED_BY" select="User.getUserById" />
 	<result column="fld_id" property="conditionsByTarget" select="cond.getConditionsByTarget"/>
 	<result column="fld_id" property="conditionsBySource" select="cond.getConditionsBySource"/>
+	<result property="booleanValues" column="FLD_ID" select="templateField.getBooleanValues"/>
 </resultMap>
 <resultMap id="map" class="java.util.HashMap">
 <result property="${FLD_NAME}" column="FLD_ID" select="templateField.getTemplateFieldById" />
@@ -187,5 +197,11 @@ select fld_type_id, fld_type, fld_desc, configurable from fld_type where fld_typ
 </select>
 <select id="getConfigurableFieldTypes" parameterClass="java.lang.Integer" resultMap="fieldtypeResultMap">
 select fld_type_id, fld_type, fld_desc, configurable from fld_type where configurable = #value#
+</select>
+<insert id="insertBooleanValues" parameterClass="booleanValue">
+insert into fld_bl_vl (id, val, dname, selected, tmpl_fld_id, ordr) values(#id#,#value#,#displayName#,#selected#,#templateFieldId#, #order#)
+</insert>
+<select id="getBooleanValues" parameterClass="java.lang.Integer" resultMap="boolValueResultMap">
+select id, val, dname, selected, tmpl_fld_id, ordr from fld_bl_vl where tmpl_fld_id = #value#
 </select>
 </sqlMap>

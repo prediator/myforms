@@ -9,7 +9,8 @@ http://www.springframework.org/schema/security/spring-security-3.0.3.xsd">
  
   <global-method-security>
   <!--<protect-pointcut expression="execution(* com.myforms.*.service.*.getUserByUsername*(..))" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-  --><protect-pointcut expression="execution(* com.myforms.*.service.*.save*(..))" access="ROLE_SUPERVISOR"/>
+  --><protect-pointcut expression="execution(* com.myforms.*.service.*.saveAnonymous*(..))" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+  <protect-pointcut expression="execution(* com.myforms.*.service.*.save*(..))" access="ROLE_SUPERVISOR"/>
    </global-method-security>
 <http entry-point-ref="authenticationEntryPoint"><!-- auto-config="false">
  access-decision-manager-ref="demoAccessDecisionManager"
@@ -35,6 +36,7 @@ http://www.springframework.org/schema/security/spring-security-3.0.3.xsd">
         <intercept-url pattern="/clientTemplateData.html" access="ROLE_SUPERVISOR" />
         <intercept-url pattern="/clientTemplateFieldData.html" access="ROLE_SUPERVISOR" />
         <intercept-url pattern="/getDocumentHistory.html" access="ROLE_SUPERVISOR, ROLE_USER" />
+        <intercept-url pattern="/clientSetupRequest.html" access="IS_AUTHENTICATED_ANONYMOUSLY" />
  		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <logout/>
          <remember-me/>

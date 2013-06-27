@@ -1,12 +1,15 @@
 package com.myforms.util;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -14,13 +17,18 @@ import org.dom4j.io.SAXReader;
 
 import com.myforms.constants.MyFormsConstants;
 import com.myforms.exception.runtimeexception.InvalidPropertyException;
+import com.myforms.logging.MyFormsLogger;
 
 public class PropertyEditor {
-private static PropertyEditor propertyEditor = new PropertyEditor();
-private static Properties properties = new Properties();
+private final static PropertyEditor propertyEditor = new PropertyEditor();
+private Properties properties;// = new Properties();
 public static PropertyEditor getInstance()
 {
 return propertyEditor;	
+}
+private PropertyEditor(){
+	properties = new Properties();
+	MyFormsLogger.getLogger().info("Property editor created!!!\n");
 }
 public void loadPropertiesFromXml() throws DocumentException, MalformedURLException, InvalidPropertyException
 {
@@ -53,8 +61,17 @@ public void loadPropertiesFromXml() throws DocumentException, MalformedURLExcept
 			
 		}
 	}
-	
+	String s = String.valueOf(map.get("htmlmessages"));
+	xmlpath = xmlpath.substring(0,xmlpath.lastIndexOf("/")+1 )+ s;
+	//Properties properties = new Properties();  
+	try {  
+	        properties.load(new FileInputStream(xmlpath));  
+	} catch (IOException e) { 
+		Logger.getLogger(this.getClass()).error(e);
+	} 
 	properties.putAll(map);
+	properties.putAll(properties);
+	MyFormsLogger.getLogger().info("all properties initialized" + properties);
 }
 public void loadPropertiesFromPFile()
 {

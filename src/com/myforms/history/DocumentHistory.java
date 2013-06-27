@@ -65,4 +65,9 @@ public class DocumentHistory  implements Comparable<DocumentHistory>{
 	public int compareTo(DocumentHistory o) {
 		return o.getUpdatedOn().compareTo(this.getUpdatedOn());
 	}
+	@Override
+	public boolean equals(Object arg0) {
+		// TODO Auto-generated method stub
+		return super.equals(arg0);
+	}
 }

@@ -47,6 +47,9 @@ background-repeat: no-repeat;
 input{
 width: 173px;
 }
+input.BOOLEAN{
+width: 50px;
+}
 select{
 width: 173px;
 }

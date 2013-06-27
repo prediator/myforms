@@ -27,6 +27,8 @@ public class DocumentFormValidator implements Validator {
 	static{
 		fieldValidatorFactory = new HashMap<String, FieldValidator>();
 		fieldValidatorFactory.put(MyFormsConstants.FieldType.TEXT, TextFieldValidator.getInstance());
+		fieldValidatorFactory.put(MyFormsConstants.FieldType.RADIO, BooleanFieldValidator.getInstance());
+		fieldValidatorFactory.put(MyFormsConstants.FieldType.CHECKBOX, BooleanFieldValidator.getInstance());
 			
 	}
 	public boolean supports(Class clazz) {
@@ -57,6 +59,8 @@ public class DocumentFormValidator implements Validator {
         //for(String fieldKey : fieldKeys)
         {
         	fieldValidatorFactory.get(MyFormsConstants.FieldType.TEXT).validate(fieldLists.get(MyFormsConstants.FieldType.TEXT), document, errors);
+        	fieldValidatorFactory.get(MyFormsConstants.FieldType.CHECKBOX).validate(fieldLists.get(MyFormsConstants.FieldType.CHECKBOX), document, errors);
+        	fieldValidatorFactory.get(MyFormsConstants.FieldType.RADIO).validate(fieldLists.get(MyFormsConstants.FieldType.RADIO), document, errors);
         }
         MyFormsLogger.getLogger().info(this.getClass(), "validate", "validator exit.");
         

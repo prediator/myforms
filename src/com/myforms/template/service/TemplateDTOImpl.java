@@ -13,10 +13,12 @@ import org.myform.keygen.dao.KeyGenerator;
 import org.springframework.util.CollectionUtils;
 
 import com.myforms.constants.MyFormsConstants;
+import com.myforms.exception.runtimeexception.InvalidFieldTypeException;
 import com.myforms.field.Field;
 import com.myforms.field.FieldEnum;
 import com.myforms.field.FieldFactory;
 import com.myforms.field.List;
+import com.myforms.field.config.model.BooleanValue;
 import com.myforms.field.config.model.FieldType;
 import com.myforms.field.config.model.TemplateField;
 import com.myforms.logging.MyFormsLogger;
@@ -30,7 +32,7 @@ import com.myforms.util.PropertyEditor;
 
 public class TemplateDTOImpl implements TemplateDTO {
 	private KeyGenerator keyGenerator;
-	public Template transferToTemplate(TemplateMetaData templateMetaData) {
+	public Template transferToTemplate(TemplateMetaData templateMetaData) throws InvalidFieldTypeException{
 		Template template = new Template();
 		template.setTemplateId(keyGenerator.generateKey(MyFormsConstants.Tables.TMPL));
 		Template parentTemplate = null;
@@ -108,10 +110,42 @@ public class TemplateDTOImpl implements TemplateDTO {
 				}
 			}
 		}
+		if(MyFormsConstants.FieldType.CHECKBOX.equalsIgnoreCase(templateField.getFieldType().getFieldType()) || 
+				MyFormsConstants.FieldType.RADIO.equalsIgnoreCase(templateField.getFieldType().getFieldType())){
+			//int index = 0;
+			for(int index = 0; true; index++){
+				if(fieldProperties.containsKey(MyFormsConstants.TemplateConstants.BOOL_FIELD+index)){
+					String field = fieldProperties.get( MyFormsConstants.TemplateConstants.BOOL_FIELD+index);
+					String selected =fieldProperties.get( MyFormsConstants.TemplateConstants.BOOL_SELECTED+index);
+					addBooleanValue(templateField,field, selected);
+					//index++;
+				}
+				else
+					break;
+			}
+		}
 		
 		templateField.setFieldName(getFieldName(templateField.getFieldTitle(),templateField.getFieldId()));
 		fieldMap.put(templateField.getFieldName(), templateField);
 		return templateField.getFieldName();
+	}
+	/**
+	 * 
+	 * @param templateField
+	 * @param field
+	 * @param selected
+	 */
+	private void addBooleanValue(TemplateField templateField, String field,
+			String selected) {
+		BooleanValue booleanValue = new BooleanValue();
+		booleanValue.setId(keyGenerator.generateKey(MyFormsConstants.Tables.BOOLEAN_VALUE).longValue());
+		booleanValue.setValue("VAL_"+booleanValue.getId());
+		booleanValue.setDisplayName(field);
+		booleanValue.setTemplateFieldId(templateField.getFieldId().longValue());
+		booleanValue.setSelected(Boolean.valueOf(selected));
+		templateField.addBooleanValue(booleanValue);
+		booleanValue.setOrder(templateField.getBooleanValues().size());
+		
 	}
 	private String getFieldName(String fieldTitle, Integer id) {
 		if(!StringUtils.isEmpty(fieldTitle)){

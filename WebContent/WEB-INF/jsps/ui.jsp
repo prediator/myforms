@@ -65,6 +65,7 @@ border-style: solid;
             cursor: pointer;
             height: 120px;
             width: 90%;
+            text-align:right;
         }
         .icart input, .icart select{
         width: 150%;

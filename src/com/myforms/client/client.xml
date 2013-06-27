@@ -4,11 +4,19 @@
     "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 <sqlMap namespace="clnt">
 <typeAlias alias="client" type="com.myforms.client.Client"/>
+<typeAlias alias="clientSetupInfo" type="com.myforms.anonymous.ClientSetupInfo"/>
 <resultMap class="client" id="clientResultMap">
 	<result property="clientId" column="clnt_id"/>
 	<result property="clientName" column="clnt_name"/>
 	<result property="description" column="clnt_desc"/>
 	<result property="templateList" column="clnt_id" select="template.getTemplateListByClientId"/>
+</resultMap>
+<resultMap class="clientSetupInfo" id="clientSetupInfoResultMap">
+	<result property="id" column="id"/>
+	<result property="clientName" column="clnt_name"/>
+	<result property="name" column="uname"/>
+	<result property="emailId" column="email"/>
+	<result property="contactNo" column="cnt_no"/>
 </resultMap>
 <select id="getClientById" parameterClass="java.lang.Long" resultMap="clientResultMap">
 	select clnt_id, clnt_name, clnt_desc from clnt where clnt_id = #value#
@@ -18,5 +26,8 @@
 </select>
 <insert id="saveClient" parameterClass="client">
 INSERT INTO CLNT (clnt_id,clnt_name,clnt_desc) VALUES (#clientId#,#clientName#,#description#)
+</insert>
+<insert id="saveAnonymousClient" parameterClass="clientSetupInfo">
+INSERT INTO anms_clnt (id,uname,clnt_nm,email,cnt_no) VALUES (#id#,#name#,#clientName#,#emailId#,#contactNo#)
 </insert>
 </sqlMap>

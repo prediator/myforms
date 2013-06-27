@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.util.CollectionUtils;
 
+import com.myforms.anonymous.ClientSetupInfo;
 import com.myforms.client.Client;
 import com.myforms.constants.MyFormsConstants;
 import com.myforms.racf.AccessType;
@@ -106,5 +107,12 @@ public class UserGroupServiceImpl implements UserGroupService {
 		role.setRoleId(Long.valueOf(userBean.getRole()));
 		racf.setUserRoles(Arrays.asList(new Role[]{role}));
 		return racf;
+	}
+	/**
+	 * 
+	 */
+	@Override
+	public void saveAnonymousClientSetupInfo(ClientSetupInfo clientSetupInfo) {
+		userGroupDao.saveAnonymousClientSetupInfo(clientSetupInfo);
 	}
 }

@@ -5,12 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.myform.keygen.dao.KeyGenerator;
 import org.springframework.orm.ibatis.support.SqlMapClientDaoSupport;
 
 import com.myforms.batch.QueryBatch;
 import com.myforms.constants.MyFormsConstants;
 import com.myforms.dao.DaoUtil;
+import com.myforms.field.config.model.BooleanValue;
 import com.myforms.field.config.model.TemplateField;
 import com.myforms.template.config.model.Template;
 import com.myforms.util.MyFormProperties;
@@ -44,10 +46,31 @@ public class SaveUpdateTemplateDaoIBatis  extends SqlMapClientDaoSupport impleme
 	
 	private void prepareTemplateFields(Template template, List<QueryBatch> queries) {
 		for(TemplateField field : template.getTemplateFieldMap().values()){
+			if(MyFormsConstants.FieldType.RADIO.equalsIgnoreCase(field.getFieldType().getFieldType()) ||
+					MyFormsConstants.FieldType.CHECKBOX.equalsIgnoreCase(field.getFieldType().getFieldType())){
+				saveBooleanValues(field.getBooleanValues(), queries);
+			}
 			queries.add(new QueryBatch(MyFormsConstants.Queries.SAVE_TEMPLATE_FLD,field));
 		}
 		
 	}
+	/**
+	 * 
+	 * @param booleanValues
+	 * @param queries
+	 */
+	private void saveBooleanValues(List<BooleanValue> booleanValues,
+			List<QueryBatch> queries) {
+		if(!CollectionUtils.isEmpty(booleanValues)){
+			for(BooleanValue booleanValue : booleanValues){
+				queries.add(new QueryBatch(MyFormsConstants.Queries.SAVE_BOOLEAN_VALUE,booleanValue));
+			}
+		}
+		
+	}
+
+
+
 	public KeyGenerator getKeyGenerator() {
 		return keyGenerator;
 	}

@@ -2,6 +2,7 @@ package com.myforms.field.config.model;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.myform.fcondition.domain.ConditionConfig;
@@ -29,6 +30,7 @@ private Boolean isMultiselect;
 private User createdBy;
 private Timestamp createdOn;
 private String version;
+private List<BooleanValue> booleanValues;
 private List<ConditionConfig> conditionsByTarget;
 private List<ConditionConfig> conditionsBySource;
 
@@ -154,6 +156,17 @@ public void setList(com.myforms.field.List list) {
 }
 public Boolean getIsMultiselect() {
 	return isMultiselect;
+}
+public List<BooleanValue> getBooleanValues() {
+	return booleanValues;
+}
+public void addBooleanValue(BooleanValue booleanValues) {
+	if(this.booleanValues == null)
+		this.booleanValues = new ArrayList<BooleanValue>();
+	this.booleanValues.add(booleanValues);
+}
+public void setBooleanValues(List<BooleanValue> booleanValues) {
+	this.booleanValues = booleanValues;
 }
 
 }

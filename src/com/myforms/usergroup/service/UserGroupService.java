@@ -2,6 +2,7 @@ package com.myforms.usergroup.service;
 
 import java.util.List;
 
+import com.myforms.anonymous.ClientSetupInfo;
 import com.myforms.client.Client;
 import com.myforms.usergroup.model.Role;
 import com.myforms.usergroup.model.User;
@@ -20,4 +21,5 @@ public interface UserGroupService {
 	public Client getClientById(Long clientId);
 	public void saveUser(User user, UserBean userBean);
 	public User getPartialUserByUserName(String username);
+	public void saveAnonymousClientSetupInfo(ClientSetupInfo clientSetupInfo);
 }

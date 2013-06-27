@@ -9,10 +9,12 @@ import java.util.Map;
 
 import com.myforms.constants.MyFormsConstants;
 import com.myforms.createdoc.RichTextDoc;
+import com.myforms.field.CheckBoxField;
 import com.myforms.field.DateField;
 import com.myforms.field.Field;
 import com.myforms.field.ListField;
 import com.myforms.field.NumberField;
+import com.myforms.field.RadioField;
 import com.myforms.field.RichTextField;
 import com.myforms.field.TextField;
 import com.myforms.field.config.model.TemplateField;
@@ -140,6 +142,16 @@ private void setDocumentFieldMap() {
 			dateField.setFieldType(MyFormsConstants.FieldType.DATE);
 			fieldMap.put(key, dateField);
 		}
+		else if(MyFormsConstants.FieldType.CHECKBOX.equals(templateField.getFieldType().getFieldType())){
+			CheckBoxField checkBoxField = new CheckBoxField(templateField);
+			checkBoxField.setFieldType(MyFormsConstants.FieldType.CHECKBOX);
+			fieldMap.put(key, checkBoxField);
+		}
+		else if(MyFormsConstants.FieldType.RADIO.equals(templateField.getFieldType().getFieldType())){
+			RadioField radioField = new RadioField(templateField);
+			radioField.setFieldType(MyFormsConstants.FieldType.RADIO);
+			fieldMap.put(key, radioField);
+		}
 	}
 	this.fieldMap =fieldMap;
 }
@@ -177,6 +189,12 @@ public void setFieldList(List<Field> fieldList){
 		}
 		else if(field instanceof DateField){
 			fieldMap.put(field.getTemplateField().getFieldName(), (DateField)field);
+		}
+		else if(field instanceof CheckBoxField){
+			fieldMap.put(field.getTemplateField().getFieldName(), (CheckBoxField)field);
+		}
+		else if(field instanceof RadioField){
+			fieldMap.put(field.getTemplateField().getFieldName(), (RadioField)field);
 		}
 	}
 }

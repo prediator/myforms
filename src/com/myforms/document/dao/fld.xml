@@ -6,7 +6,10 @@
 <typeAlias type="com.myforms.field.ListField" alias="listField"/>
 <typeAlias type="com.myforms.field.TextField" alias="textField"/>
 <typeAlias type="com.myforms.field.DateField" alias="dateField"/>
+<typeAlias type="com.myforms.field.RadioField" alias="radioField"/>
+<typeAlias type="com.myforms.field.CheckBoxField" alias="checkboxField"/>
 <typeAlias type="com.myforms.field.RichTextField" alias="richTextField"/>
+<typeAlias type="com.myforms.field.BooleanSelectedValue" alias="boolSelectedValue"/>
 <resultMap class="field" id="fieldResultMap">
 <result column="fld_id" property="id"/>
 <result column="fld_value" property="fieldValue"/>
@@ -19,6 +22,8 @@
 	<subMap  value="LIST" resultMap="listFieldResultMap"/>	
 	<subMap  value="TXT" resultMap="textFieldResultMap"/>
 	<subMap  value="NUM" resultMap="textFieldResultMap"/>
+	<subMap  value="CHKBOX" resultMap="checkboxFieldResultMap"/>
+	<subMap  value="RADIO" resultMap="radioFieldResultMap"/>
 	<subMap  value="RICHTXT" resultMap="richTextFieldResultMap"/>
 	<subMap  value="DT" resultMap="dateFieldResultMap"/>
 	</discriminator>
@@ -35,6 +40,8 @@
 	<subMap  value="TXT" resultMap="textFieldResultMap"/>
 	<subMap  value="RICHTXT" resultMap="richTextFieldResultMap"/>
 	<subMap  value="DT" resultMap="dateFieldResultMap"/>
+	<subMap  value="CHKBOX" resultMap="checkboxFieldResultMap"/>
+	<subMap  value="RADIO" resultMap="radioFieldResultMap"/>
 	</discriminator>
 </resultMap>
 <resultMap id="listFieldResultMap" class="listField" extends="fieldResultMap">
@@ -75,7 +82,32 @@
 <result column="fld_id" property="document" select="document.getPartialDocumentById"/>
  <result property="dataList" column="fld_id" select="fld.getRichTextDataListByFieldId"/>
 </resultMap>
-
+<resultMap id="radioFieldResultMap" class="radioField" extends="fieldResultMap">
+<result column="fld_id" property="id"/>
+<result column="fld_value" property="fieldValue"/>
+<result column="fld_type" property="fieldType"/>
+<result column="tmpl_fld_id" property="templateField" select="templateField.getTemplateFieldById"/>
+<result column="last_updtd_by" property="lastUpdatedBy" select="User.getUserById"/>
+<result column="last_updtd_on" property="lastUpdatedOn"/>
+<result column="fld_id" property="document" select="document.getPartialDocumentById"/>
+<result property="selectedValues" column="fld_id" select="fld.getBooleanSelectedValues"/>
+</resultMap>
+<resultMap id="checkboxFieldResultMap" class="checkboxField" extends="fieldResultMap">
+<result column="fld_id" property="id"/>
+<result column="fld_value" property="fieldValue"/>
+<result column="fld_type" property="fieldType"/>
+<result column="tmpl_fld_id" property="templateField" select="templateField.getTemplateFieldById"/>
+<result column="last_updtd_by" property="lastUpdatedBy" select="User.getUserById"/>
+<result column="last_updtd_on" property="lastUpdatedOn"/>
+<result column="fld_id" property="document" select="document.getPartialDocumentById"/>
+<result property="selectedValues" column="fld_id" select="fld.getBooleanSelectedValues"/>
+</resultMap>
+<resultMap class="boolSelectedValue" id="boolSelValueResultMap">
+	<result property="id" column="id"/>
+	<result property="fieldId" column="fld_id"/>
+	<result property="value" column="val"/>
+	<result property="selected" column="selected"/>
+</resultMap>
 <statement id="getListValuesByFieldId" parameterClass="java.lang.Integer" resultClass="java.lang.String">
 SELECT LIST_VALUE FROM TRAN_FLD_LIST WHERE FLD_ID = #value#
 </statement>
@@ -113,5 +145,13 @@ DELETE  FROM  TRAN_FLD_LIST WHERE FLD_ID in  (SELECT FLD_ID FROM  TRAN_FLD WHERE
 <statement id="deleteRTFieldByDocId">
 DELETE  FROM  TRAN_RICH_TXT WHERE FLD_ID in  (SELECT FLD_ID FROM  TRAN_FLD WHERE DOC_ID = #documentId# AND FLD_TYPE = #fieldType# )
 </statement>
-
+<select id="getBooleanSelectedValues" resultMap="boolSelValueResultMap" parameterClass="java.lang.Integer">
+select id, fld_id, val, selected from tran_fld_bl_vl where fld_id = #value#
+</select>
+<insert id="insertBooleanSelectedValues" parameterClass="boolSelectedValue">
+insert into tran_fld_bl_vl (id, fld_id, val, selected) values (#id#,#fieldId#,#value#,#selected#)
+</insert>
+<delete id="deleteBooleanValues" parameterClass="java.util.Map">
+DELETE  FROM  tran_fld_bl_vl WHERE FLD_ID in  (SELECT FLD_ID FROM  TRAN_FLD WHERE DOC_ID = #documentId# AND FLD_TYPE = #fieldType# )
+</delete>
 </sqlMap>
