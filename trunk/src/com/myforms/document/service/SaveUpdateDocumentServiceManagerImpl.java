@@ -58,8 +58,8 @@ public class SaveUpdateDocumentServiceManagerImpl implements
 		if(document.getFieldMap() != null){
 			for(String key : document.getFieldMap().keySet()){
 				Field field = document.getFieldMap().get(key);
-				if(oldDocument.getFieldMap() != null && oldDocument.getFieldMap().get(key) != null)
-					oldDocument.getFieldMap().get(key).setDirty(field.isDirty());
+				if(oldDocument.getFieldMap() != null && oldDocument.getFieldMap().get(key) != null && oldDocument.getFieldMap().get(key).getFieldValue() != null)
+					oldDocument.getFieldMap().get(key).setDirty(!oldDocument.getFieldMap().get(key).getFieldValue().equals(field.getFieldValue()));
 			}
 		}
 		return oldDocument;

@@ -243,7 +243,10 @@ $(document).ready(function() {
 		$('#fs_fld_label').val('');
 		
 		if($('#fs_fld_dflt').val() !=null && $('#fs_fld_dflt').val() != '')	
-		$(topDiv).find(fldTxt).val($('#fs_fld_dflt').val());
+		{
+			$(topDiv).find(fldTxt).val($('#fs_fld_dflt').val());
+			$(topDiv).find('.fldDisplayLabel').html($('#fs_fld_dflt').val());
+		}
 		$('#fs_fld_dflt').val('');
 		
 		if($('#fs_fld_help').val() !=null && $('#fs_fld_help').val() != '')	{
@@ -320,7 +323,15 @@ var selectedList = ".LIST_List_Selected";
 				addElement(form,nm,_selList);
 			} 
 			
-			
+			if($(topDiv).find('.__fld_type_').html() == 'RADIO' || $(topDiv).find('.__fld_type_').html() == 'CHKBOX'){
+				
+				$(topDiv).find('._boolean-fields').each(function(i, field){
+					nm = getName(_i,_j,"field" + i);
+					addElement(form,nm,$(this).find('.fldDisplayLabel').text());
+					nm = getName(_i,_j,'selected' + i);
+					addElement(form,nm,$(this).find('input').is(':checked'));
+				});							
+			} 
 			nm = getName(_i,_j,'label');
 			addElement(form,nm,$(topDiv).find(fldLabel).html());
 			
@@ -453,7 +464,9 @@ $('.save__list').click(function(){
     	values[i] = $(selected).text();
 	});
 	params['values'] = values;
-	
+	$('._list__val-tmpl option').empty();
+	$('#__list_name_').val('');
+	$('#__list_value_').val('');
 	$.post('./saveTemplateList.html',params, function(data){
 		var dataVal = $.parseJSON(data);
 		var img = '&nbsp;<img class="___delete_list__" src="./images/delete.jpg" />';
@@ -481,6 +494,7 @@ var val = $('#__list_value_').val();
 	if(val != null && val != ''){
 		$('._list__val-tmpl').append('<option>'+val+'</option>');
 		$('#__list_value_').val('');
+		$('#__list_value_').focus();
 	}
 });
 
@@ -693,14 +707,17 @@ showAdditionalSettings = function(el){
 		$('#field_view').removeAttr('disabled');
 	}
 	else{
-		$('#field_view').attr('disabled','disabled');
+		//$('#field_view').attr('disabled','disabled');
 	}
 	if(type == 'RADIO'){
-		setupRadioCheckboxes(el, type);
+		setupRadioCheckboxes(el, type, 'radio');
+	}
+	if(type == 'CHKBOX'){
+		setupRadioCheckboxes(el, type, 'checkbox');
 	}
 }
-setupRadioCheckboxes = function(el, type){
-	var radio = $(el).parents('td:first').find('input[type="radio"]');
+setupRadioCheckboxes = function(el, type, inputType){
+	var radio = $(el).parents('td:first').find('input[type="'+inputType+'"]');
 	var lbls = $(el).parents('td:first').find('._fld-label');
 	
 	var tr = $('table.add_settings_table').find('tr:first');
@@ -709,25 +726,65 @@ setupRadioCheckboxes = function(el, type){
 	$(radio).each(function(i, fld){
 		var lbl = lbls[i];		
 		var row = $(tr).clone();
-		row.find('input[type="radio"]').attr('checked', $(radio).attr('checked'));
+		row.find(':radio , :checkbox').replaceWith($('<input type="'+inputType+'" class="add_settings_rd" name="'+inputType+'"/>'));
+		row.find('input[type="'+inputType+'"]').attr('checked', $(this).attr('checked'));
+		row.find('input[type="'+inputType+'"]').attr('name',inputType);
 		row.find('input[type="text"]').val($(lbl).text());
+		row.attr('dataid', $(this).parents('span._boolean-fields:first').attr('dataid'));
 		row.appendTo($('table.add_settings_table'));
 		$(row).find('._add_radio_val').on('click',addNewFieldRow);
 		$(row).find('._delete_radio_val').on('click',deletFieldRow);
+		$(row).find('input[type="text"]').on('blur',changeRadioText);
+		$(row).find('input[type="radio"]').on('change',changeRadioVal);
+		$(row).find('input[type="checkbox"]').on('change',changeRadioVal);
 	});
 }
-
+changeRadioText = function(){
+	$('td._fs_current').find('span._boolean-fields[dataid="'+$(this).parents('tr:first').attr('dataid')+'"]').find('.fldDisplayLabel').html($(this).val());
+}
+changeRadioVal  = function(){
+	$('td._fs_current').find('input[type="radio"]').removeAttr('checked');
+	$('td._fs_current').find('span._boolean-fields[dataid="'+$(this).parents('tr:first').attr('dataid')+'"]').find('input[type="checkbox"]').removeAttr('checked');
+	$('td._fs_current').find('span._boolean-fields[dataid="'+$(this).parents('tr:first').attr('dataid')+'"]').find('input').attr('checked',$(this).attr('checked'));
+}
 addNewFieldRow = function(){
+	
+	var cp  = getColSpan($('td._fs_current'));
+	if(cp == 1 && $('td._fs_current').find('span._boolean-fields').length >= 3){
+		alert('Expand column to add more elements.');
+		return;
+	}
+	/*
+	 * TODO to support more than three radio buttons
+	 * if($('td._fs_current').find('span._boolean-fields').length == 3){
+		$('td._fs_current').find('div.RADIO:last').after($('td._fs_current').find('div.RADIO:last').clone().html(''));
+	}*/
 	var clone = $(this).parent().clone();
-	$(clone).find('input').val('');
+	$(clone).find('input').val('Value');
 	$(clone).find('input').removeAttr('checked');
+	$(clone).find('input[type="radio"]').attr('name','radio');
 	$(this).parent().after($(clone));
+	var fldClone = $('td._fs_current').find('span._boolean-fields:first').clone();
+	var dataid =  $('td._fs_current').find('span._boolean-fields').length;
+	$(fldClone).attr('dataid', dataid);
+	$(clone).attr('dataid',dataid);
+	$(fldClone).find('input').removeAttr('checked');
+	$('td._fs_current').find('span._boolean-fields[dataid="'+$(this).parent().attr('dataid')+'"]').after(fldClone);
 	
 	$(clone).find('._add_radio_val').on('click',addNewFieldRow);
 	$(clone).find('._delete_radio_val').on('click',deletFieldRow);
 	
+	$(clone).find('input[type="text"]').on('blur',changeRadioText);
+	$(clone).find('input[type="radio"]').on('change',changeRadioVal);
+	$(clone).find('input[type="checkbox"]').on('change',changeRadioVal);
+	$(clone).find('input[type="text"]').val('Value');
+	//$(clone).find('._delete_radio_val').on('click',deletFieldRow);
+	
 }
-deletFieldRow = function(){
+deletFieldRow = function(){	
+	if($('td._fs_current').find('span._boolean-fields').length <=1)
+		return;
+	$('td._fs_current').find('span._boolean-fields[dataid="'+$(this).parent().attr('dataid')+'"]').remove();
 	$(this).parent().remove();
 }
 getColSpan= function(etd){
@@ -786,7 +843,22 @@ showDocumentHistory = function(){
 		//table.html(data);
 	});
 }
+changeFieldView=function(){
+	if($(this).val() == 'singlerow'){
+		$('td._fs_current').find('a.expand_fld').trigger('click');
+		$('td._fs_current').find('a.expand_fld').trigger('click');
+	}
+	else if($(this).val() == 'classical'){
+		$('td._fs_current').find('a.collapse_fld').trigger('click');
+		$('td._fs_current').find('a.collapse_fld').trigger('click');
+	}
+}
+removeSelectedOptions = function(){
+	$(this).siblings('select._list__val-tmpl').find('option:selected').remove();
+}
 $(document).ready(function(){
 	$('.doc_history').on('click',showDocHistoryConfig);
 	$('#_document-history-tab').on('click',showDocumentHistory);
+	$('#field_view').on('change',changeFieldView);
+	$('.__delete_sel_list').on('click', removeSelectedOptions);
 });

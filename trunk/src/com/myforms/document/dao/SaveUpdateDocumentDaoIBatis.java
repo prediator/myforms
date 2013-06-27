@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.myform.keygen.dao.KeyGenerator;
 import org.springframework.orm.ibatis.SqlMapClientCallback;
 import org.springframework.orm.ibatis.support.SqlMapClientDaoSupport;
@@ -18,6 +19,8 @@ import com.myforms.batch.QueryBatch;
 import com.myforms.constants.MyFormsConstants;
 import com.myforms.exception.runtimeexception.ConcurrentUpdateException;
 import com.myforms.exception.runtimeexception.DocumentUpdateException;
+import com.myforms.field.BooleanField;
+import com.myforms.field.BooleanSelectedValue;
 import com.myforms.field.DateField;
 import com.myforms.field.Field;
 import com.myforms.field.ListField;
@@ -71,6 +74,9 @@ public class SaveUpdateDocumentDaoIBatis extends SqlMapClientDaoSupport implemen
 				}
 				else if(MyFormsConstants.FieldType.DATE.equals(field.getFieldType())){
 					saveDateField((DateField)field, document,queries);
+				}
+				else if(MyFormsConstants.FieldType.CHECKBOX.equals(field.getFieldType()) || MyFormsConstants.FieldType.RADIO.equals(field.getFieldType())){
+					saveBooleanField((BooleanField)field, document,queries);
 				}
 				
 			}
@@ -280,10 +286,22 @@ public class SaveUpdateDocumentDaoIBatis extends SqlMapClientDaoSupport implemen
 		lfmap.put(MyFormsConstants.ParamsName.DOCUMENT_ID, document.getId());
 		lfmap.put(MyFormsConstants.ParamsName.FIELD_TYPE, MyFormsConstants.FieldType.LIST);
 		QueryBatch query2 = new QueryBatch(MyFormsConstants.Queries.DELETE_FIELDS_LIST,lfmap);
+		
+		lfmap = new HashMap<String, Object>();
+		lfmap.put(MyFormsConstants.ParamsName.DOCUMENT_ID, document.getId());
+		lfmap.put(MyFormsConstants.ParamsName.FIELD_TYPE, MyFormsConstants.FieldType.CHECKBOX);
+		QueryBatch query3 = new QueryBatch("fld.deleteBooleanValues",lfmap);
+
+		lfmap = new HashMap<String, Object>();
+		lfmap.put(MyFormsConstants.ParamsName.DOCUMENT_ID, document.getId());
+		lfmap.put(MyFormsConstants.ParamsName.FIELD_TYPE, MyFormsConstants.FieldType.RADIO);
+		QueryBatch query4 = new QueryBatch("fld.deleteBooleanValues",lfmap);
 
 		
 		queries.add(query1);
 		queries.add(query2);
+		queries.add(query3);
+		queries.add(query4);
 		queries.add(new QueryBatch(MyFormsConstants.Queries.DELETE_FIELDS,document.getId()));
 	}
 
@@ -294,6 +312,51 @@ public class SaveUpdateDocumentDaoIBatis extends SqlMapClientDaoSupport implemen
     	Integer updated = (Integer)getSqlMapClientTemplate().queryForObject(MyFormsConstants.Queries.CONCURRENT_DOCUMENT_UPDATE, map);    	
     	return updated == 1;
     }
+	
+	public void saveBooleanField(BooleanField field, Document document, List<QueryBatch> queries)
+    {
+    	Map<String,Object> fldParams = new HashMap<String, Object>();
+    	TemplateField templateField = field.getTemplateField();
+    	Integer fieldId;
+    	fieldId = field.getId();
+    	if(fieldId == null || fieldId == 0){
+    	fieldId = getKeyForFields(MyFormsConstants.Tables.FLD);
+    	}
+    	if(fieldId!= null){
+    	fldParams.put(MyFormsConstants.ParamsName.FIELD_ID, fieldId);
+    	}
+    	field.setId(fieldId);
+    	fldParams.put(MyFormsConstants.ParamsName.TEMPLATE_FIELD_ID,templateField.getFieldId());
+    	if(field.getBooleanValue() != null && field.getBooleanValue())
+    	fldParams.put(MyFormsConstants.ParamsName.FIELD_VALUE,field.getFieldValue());
+    	else
+    		fldParams.put(MyFormsConstants.ParamsName.FIELD_VALUE,null);
+    	fldParams.put(MyFormsConstants.ParamsName.FIELD_TYPE,field.getFieldType());
+    	fldParams.put(MyFormsConstants.ParamsName.FIELD_UPDATED_BY, document.getUpdatedBy().getUserId());
+    	fldParams.put(MyFormsConstants.ParamsName.FIELD_UPDATED_ON,document.getUpdatedOn()); 
+    	fldParams.put(MyFormsConstants.ParamsName.DOCUMENT_ID,document.getId()); 
+    	QueryBatch batch = new QueryBatch(MyFormsConstants.Queries.INSERT_FIELD,fldParams);
+    	queries.add(batch);
+    	if(field.getBooleanValue() != null && field.getBooleanValue())
+    	addBooleanValues(queries, field);
+    }
+	/**
+	 * 
+	 * @param queries
+	 * @param field
+	 */
+	private void addBooleanValues(List<QueryBatch> queries, BooleanField field) {
+		if(!CollectionUtils.isEmpty(field.getSelectedValues())){
+			for(BooleanSelectedValue value : field.getSelectedValues()){
+				if(value.getSelected() !=null && value.getSelected()){
+					value.setId(keyGenerator.generateKey(MyFormsConstants.Tables.SELECTED_BOOLEAN_VALUE).longValue());
+					value.setFieldId(field.getId().longValue());
+					QueryBatch batch = new QueryBatch("fld.insertBooleanSelectedValues",value);
+			    	queries.add(batch);
+				}
+			}
+		}		
+	}
 
 	public KeyGenerator getKeyGenerator() {
 		return keyGenerator;

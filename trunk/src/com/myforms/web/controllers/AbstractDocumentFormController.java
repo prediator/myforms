@@ -15,11 +15,14 @@ import org.springframework.web.servlet.mvc.SimpleFormController;
 
 import com.myforms.constants.MyFormsConstants;
 import com.myforms.document.service.SaveUpdateDocumentServiceManager;
+import com.myforms.field.CheckBoxField;
 import com.myforms.field.DateField;
 import com.myforms.field.ListField;
 import com.myforms.field.NumberField;
+import com.myforms.field.RadioField;
 import com.myforms.field.RichTextField;
 import com.myforms.field.TextField;
+import com.myforms.field.propertyeditor.BooleanFieldProprtyEditor;
 import com.myforms.field.propertyeditor.DateFieldPropertyEditor;
 import com.myforms.field.propertyeditor.ListFieldPropertyEditor;
 import com.myforms.field.propertyeditor.NumberFieldPropertyEditor;
@@ -40,6 +43,8 @@ protected void initBinder(HttpServletRequest request, ServletRequestDataBinder b
 	binder.registerCustomEditor(RichTextField.class,new RichTextFieldEditor(fieldServiceManager));
 	binder.registerCustomEditor(DateField.class,new DateFieldPropertyEditor(fieldServiceManager));
 	binder.registerCustomEditor(NumberField.class,new NumberFieldPropertyEditor(fieldServiceManager));
+	binder.registerCustomEditor(CheckBoxField.class,new BooleanFieldProprtyEditor(fieldServiceManager));
+	binder.registerCustomEditor(RadioField.class,new BooleanFieldProprtyEditor(fieldServiceManager));
 	super.initBinder(request, binder);
 }
 @Override

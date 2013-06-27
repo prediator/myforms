@@ -175,7 +175,7 @@ $(document).ready(function() {
       <div id="item_container" style="margin-left:20px;width:220px !important;padding-left: 10px;padding-top: 15px;">
       <div class="_field_setting_div _common" style="display: none;">
       	<label>Field View :</label> <span> 
-      	<select id="field_view" disabled="disabled">
+      	<select id="field_view" >
       		<option value="classical" selected>
       			Classical view
       		</option>
@@ -184,12 +184,12 @@ $(document).ready(function() {
       		</option>
       	</select></span>
       </div>
-            <div class="_field_setting_div RADIO" style="display: none;">
+            <div class="_field_setting_div RADIO CHKBOX" style="display: none;">
       		<label>Add options :</label> <span> 
       		<table class="add_settings_table add_settings_radio">
-      			<tr>      		
+      			<tr dataid="0">      		
       				<td class="td15">
-      					<input type="radio" class="add_settings_rd">
+      					<input type="radio" class="add_settings_rd" name='radio'>
       				</td>
       				<td>
       					<input type="text" class="add_settings_fld"/>
@@ -203,6 +203,7 @@ $(document).ready(function() {
       		</tr>
       		
       		</table>
+      		
       		
       		   		</span>
       </div>

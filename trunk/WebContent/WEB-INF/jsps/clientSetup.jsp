@@ -1,25 +1,37 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+    <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>MyForms Login</title>
+<title>Myforms - Client Setup Request</title>
 <script type="text/javascript" src="scripts/jquery/jquery-1.7.js"></script>
-<script type="text/javascript" src="scripts/canvas/liquid-canvas.js"></script>
-<script type="text/javascript" src="scripts/canvas/liquid-canvas-plugins.js"></script>
-<script type="text/javascript">
-      // First we wait until the document is completely loaded using the handy
-      // jQuery "ready" method.
-      $(window).load(function() {
-        // No we can paint our canvas. Something rounded with a shadow ;-)
-        $("#loginscreen").liquidCanvas(
-            "[shadow border gradient] => roundedRect{radius:20}");
-      });
-	</script>  
+
 	<style type="text/css">
       #loginscreen {  height:450px;;width:15%; margin-right:50px; padding:40px;float:right; }
+       p{
+       font-family: verdana;
+      font-size: small;
+      padding: 5px 0px;
+      color: #555;
+      
+      }
+      div.error{
+      color:red;
+      font-family: verdana;
+      font-size: small;
+      padding: 5px 0px;
+      }
       div.logFld{
+      font-weight: bold;
+      font-family: verdana;
+      font-size: small;
+      padding: 5px 0px;
+      }
+      
+       span.logFld{
       font-weight: bold;
       font-family: verdana;
       font-size: small;
@@ -119,6 +131,9 @@ color: gray;
       color: gray;
       text-decoration: none;     
       }
+      td{
+      vertical-align: top;
+      }
       A:link {text-decoration: none}
 A:visited {text-decoration: none}
 A:active {text-decoration: none}
@@ -131,46 +146,27 @@ A:hover {text-decoration: underline; color: black;}
 <div style="width 100%;height: 9%;" class='header   image'><img style="height: 60px;" src='images/logo.jpg'>
 <div class="text loc4">MyForms&#0153; </div></div>
 <div style="height: 100%;">
+<form:form method="post" action="clientSetupRequest.html" commandName="clientSetupInfo">
 <div class='leftarea'>
-<div class='right image'><img style="height: 450px;margin-top: 38px;float: left;" src='images/l.jpg'>
-<div class="text loc3">
-        <p>Enjoy With MyForms</p>
- 	 </div>
-</div>
-	<div class='top image' ><img style="height: 250px;" src='images/d.jpg'>
-	<div class="text loc1">
-        <p>Create Your Template</p>
-  </div>
-	</div>
-	<div class='bottom  image'><img style="height: 250px;" src='images/t.jpg'>
-	<div class="text loc2">
-        <p>Edit/Update Documents</p>
- 	 </div>
-	</div>
+
+<table width="60%" style="margin-left: 20%;margin-bottom: 50px;;">
+<tr><td colspan="2"><div class='logFld'>Please fill all required information.</div></td></tr>
+<tr><td><div class='logFld'>*Your Name :</div></td><td><form:input type="text" path="name"/><div class="error"><form:errors path="name"/></div></td></tr>
+<tr><td><div class='logFld'>*Your Organization name : </div></td><td><form:input type="text" path="clientName"/><div class="error"><form:errors path="clientName"/></div></td></tr>
+<tr><td><div class='logFld'>*Your Email id :</div></td><td><form:input type="text" path="emailId"/>
+<div class="error"><form:errors path="emailId"/></div>
+</td></tr>
+<tr><td><div class='logFld'>*Your Contact No.</div></td><td><form:input type="text" path="contactNo"/><div class="error"><form:errors path="contactNo"/></div></td></tr>
+<tr><td colspan="2"><p>Once your request is approved you will recive an email with your temporary username/password that you can change upon your first login.
+You will more information at you email address provided on this user form.</p> </td></tr>
+<tr><td><div class='logFld'></div></td><td style="float: right;"><input type="submit" name="submit" value="Submit information"></td></tr>
+<tr><td><div class='logFld'></div></td><td style="float: right;"><p>Already have Account <span class='logFld'><a href="./login.html">Login</a></span></p></td></tr>
+</table>
 	
 </div>
 <div id="loginscreen">
-	   <form action="login.html" method="post">
-	   <div class='errors'>
-	   <c:if test="${not empty param.login_error}">
-      <font color="red">
-        Your login attempt was not successful, try again.<br/>
-        
-        Reason: <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>.<br/>
-      </font>
-    </c:if>
-	   </div>
-	    <div class='logFld'>Username</div>
-			<div class=''><input name="username"/></div>
-			<div class='logFld'>Password</div>
-			<div class=''><input name="password" type="password"/></div>
-    <img class='login' src="images/login.jpg" onclick="javascript:this.parentNode.submit();"/>
-    <div class='linkdiv'>
-     <div style="margin-bottom: 7px;"><a class='link' href="#">Forget password</a></div>
-     <div><a class='link' href="#">Create Account</a></div>
-     <div><a class='link' href="clientSetupRequest.html">Request client setup</a></div>
-    </div>
-</form>
+	
+</form:form>
 	  </div></div>
 	  <div class="footer">
 <br/>&copy;Copyright 2012. All Rights are Reserved Mohd Irshad 

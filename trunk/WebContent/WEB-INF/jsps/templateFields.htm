@@ -18,11 +18,15 @@
 				  B</option>
 				  <option value="C">
 				  C</option>
-				</select>	
+				</select>
+				<span style="display: none;" class="LIST_List_Selected" >false</span>		
 				{{else}}
+{{if htmlType == 'radio' || htmlType == 'checkbox' }}
+<span class="_boolean-fields" dataid='0'><div>
+{{/if}}
 				<input class="fldTxt" type="${htmlType}" value="" name="" id="txtfld" disabled="disabled">
 				{{if htmlType == 'radio' || htmlType == 'checkbox' }}
- 					<span class="fldLabel _fld-label">Value</span>
+ 					<span class="fldDisplayLabel _fld-label">Value</span></div></span>
 				{{/if}}	
 				{{/if}}
 				<span style="display: none;" class="__fld_type_"  >${fieldType}</span>	

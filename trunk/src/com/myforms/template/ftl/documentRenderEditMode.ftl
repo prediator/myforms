@@ -11,6 +11,8 @@
 			<@renderPasswordField field/>			
 		<#elseif field.fieldType.fieldType == 'CHKBOX'> 
 			<@renderCheckBoxField field/>
+		<#elseif field.fieldType.fieldType == 'RADIO'> 
+			<@renderRadioField field/>
 		<#elseif field.fieldType.fieldType == 'LIST'> 
 			<@renderListField field/>
 		<#elseif field.fieldType.fieldType == 'DT'> 
@@ -73,7 +75,34 @@ none;
 	<div id="div_${field.fieldName}" class="fieldDiv  <#if field.isRequired = true>error_fld_cls<#else>dflt_fld_cls</#if>">
 	
 	<@renderLabel field/>
-	<input id='${field.fieldName}' type="checkbox" name='fieldMap["${field.fieldName}"]' value = '${field.defaultValue}!""'/>
+	<#if fieldMap["${field.fieldName}"].selectedValues?exists>
+	   <#list fieldMap["${field.fieldName}"].selectedValues as val>
+	   <div>
+	   		<input class="BOOLEAN" id='${field.fieldName}' type="checkbox" name='fieldMap["${field.fieldName}"]' value = "${val.value!""}"	
+						<#if val.selected == true>
+				checked
+			</#if>	/>${val.displayName!""}
+	   </div>
+	   </#list>
+	</#if>
+	</div>
+</#macro>
+<#macro renderRadioField field>
+	<div id="div_${field.fieldName}" class="fieldDiv  <#if field.isRequired = true>error_fld_cls<#else>dflt_fld_cls</#if>">
+	
+	<@renderLabel field/>
+	
+	<#if fieldMap["${field.fieldName}"].selectedValues?exists>
+	   <#list fieldMap["${field.fieldName}"].selectedValues as val>
+	   <div>
+	   		<input class="BOOLEAN" id='${field.fieldName}' type="radio" name='fieldMap["${field.fieldName}"]' value = "${val.value!""}"	
+						<#if val.selected == true>
+				checked
+			</#if>	/>${val.displayName!""}
+	   </div>
+	   </#list>
+	</#if>
+	
 	</div>
 </#macro>
 

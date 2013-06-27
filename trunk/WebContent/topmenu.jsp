@@ -17,6 +17,11 @@
 function submitForm()
 {
    saveEditors();
+   $('input[type="checkbox"]').each(function(){
+	   if(!$(this).is(':checked')){
+		   $(this).val('');
+	   }
+   });
    $('#form').submit();
 }
 function saveEditors(){
