@@ -1,6 +1,11 @@
 package com.myforms.web.controllers.anonymous;
 
+import java.io.IOException;
+
+import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -11,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.myforms.anonymous.ClientSetupInfo;
+import com.myforms.constants.MyFormsConstants;
+import com.myforms.mail.MailMessage;
+import com.myforms.mail.MailSender;
 import com.myforms.usergroup.service.UserGroupService;
 
 /**
@@ -28,6 +36,8 @@ public class AnonymousRequestController {
 	private UserGroupService userGroupService;
 	@Autowired(required=true)
 	private Validator validator;
+	@Autowired
+	private MailSender mailSender;
 	/**
 	 * 
 	 * @return
@@ -42,15 +52,27 @@ public class AnonymousRequestController {
 	 * 
 	 * @param clientSetupInfo
 	 * @return
+	 * @throws MessagingException 
+	 * @throws MailException 
+	 * @throws IOException 
 	 */
 	@RequestMapping(method=RequestMethod.POST)
-	public String saveAnonumousClient(ClientSetupInfo clientSetupInfo, BindingResult result){
+	public String saveAnonumousClient(ClientSetupInfo clientSetupInfo, BindingResult result) throws MailException, MessagingException, IOException{
 		validator.validate(clientSetupInfo, result);
 		
 		if(result.hasErrors())
 			return "clientSetup";
+		clientSetupInfo.setStatus(MyFormsConstants.AnymClientStatus.NA);
 		userGroupService.saveAnonymousClientSetupInfo(clientSetupInfo);
-		return "redirect:thanks.html?key=clientSetupThanks";
+		MailMessage mailMessage = new MailMessage();
+		mailMessage.setTo(clientSetupInfo.getEmailId());
+		mailMessage.setMessageKey(MyFormsConstants.MeesageKey.CLIENT_THANKS);
+		mailMessage.setFrom("from@myforms.com");
+		mailMessage.setSubject("Subject");
+		mailMessage.setReplyTo("noreply@myforms.com");
+		mailMessage.setHTML(true);
+		mailSender.send(mailMessage);
+		return "redirect:thanks.html?key="+MyFormsConstants.MeesageKey.CLIENT_THANKS;
 	}
 	
 	/*@RequestMapping(value="/thanks.html")

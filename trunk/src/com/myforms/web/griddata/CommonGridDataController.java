@@ -2,8 +2,11 @@ package com.myforms.web.griddata;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedSet;
 
 import net.sf.json.JSONArray;
@@ -16,6 +19,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.myforms.anonymous.ClientSetupInfo;
 import com.myforms.client.Client;
 import com.myforms.constants.MyFormsConstants;
 import com.myforms.document.service.CreateFetchDocumentServiceManager;
@@ -27,6 +31,7 @@ import com.myforms.template.service.CreateFetchTemplateServiceManager;
 import com.myforms.usergroup.model.User;
 import com.myforms.usergroup.service.UserGroupService;
 import com.myforms.util.MyFormProperties;
+import com.myforms.util.MyFormsUtils;
 import com.myforms.web.model.Document;
 
 
@@ -71,7 +76,15 @@ public class CommonGridDataController {
 	@ResponseBody
 	public String documentDataHandler(Model model){
 		JSONArray documentsArray = new JSONArray();
-		List<Document> documents= createFetchDocumentServiceManager.getAllDocuments();
+		List<Template> templats = MyFormProperties.getInstance().getCurrentUser().getClient().getTemplateList();
+		List<Long> list =new ArrayList<Long>();
+		if(!CollectionUtils.isEmpty(templats)){
+			for(Template t: templats)
+				list.add(t.getTemplateId().longValue());
+		}
+		else
+			return "";
+		List<Document> documents= createFetchDocumentServiceManager.getAllDocuments(list);
 		
 		for(Document document : documents){
 			JSONObject documentJson = new JSONObject();
@@ -275,7 +288,38 @@ private JSONObject prepareHeader(HistoryTemplateField historyTemplateField,
 	historySetup.put("id", id);
 	return historySetup;
 }
+@RequestMapping(value="/getAllAnonymousClientSetupInfo.html")
+@ResponseBody
+public String getAllAnonymousClientSetupInfo(){
+List<ClientSetupInfo>  clientSetupInfos =	userGroupService.getAllAnonymousClientSetupInfo();
+ClientSetupInfo clientSetupInfo = new ClientSetupInfo();
+clientSetupInfo.setId(0l);
+clientSetupInfo.setName("Client Name");
+clientSetupInfo.setClientName("Organization Name");
+clientSetupInfo.setContactNo("Contact No");
+clientSetupInfo.setEmailId("Email Id");
+clientSetupInfo.setStatus("Status");
+if(clientSetupInfos != null)
+	clientSetupInfos.add(0, clientSetupInfo);
+JSONArray array = JSONArray.fromObject(clientSetupInfos);
+Map<Long, ClientSetupInfo> map = new HashMap<Long, ClientSetupInfo>();
+for(ClientSetupInfo s : clientSetupInfos){
+	map.put(s.getId(), s);
+}
 
+if(array.size() > 0){
+	((JSONObject)array.get(0)).put("statusChangeDate","Status Change Date");
+	((JSONObject)array.get(0)).put("id","Id");
+	for(Object o : array){
+		JSONObject object = (JSONObject)o;
+		if(object.has("statusChangeDate") && object.get("statusChangeDate") != null && object.get("id") != "Id")
+		{
+			object.put("statusChangeDate", MyFormsUtils.getFormattedDate(map.get(object.getLong("id")).getStatusChangeDate()));
+		}
+	}
+}
+return array.toString();	
+}
 public CreateFetchTemplateServiceManager getCreateFetchTemplateServiceManager() {
 	return createFetchTemplateServiceManager;
 }

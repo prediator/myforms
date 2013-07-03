@@ -98,6 +98,10 @@ ddaccordion.init({
 	<img style="margin-right: 3px;"  src="images/ar.jpeg"/><a href="#" class="admin_menu _view_clients">View Clients&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
 	</li>
 	<li class="mainmenuli">
+	<img style="margin-right: 3px;"  src="images/ar.jpeg"/><a href="#" class="admin_menu _view_client_setup">View Client setup&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+	</li>
+	
+	<li class="mainmenuli">
 	<img style="margin-right: 3px;"  src="images/ar.jpeg"/><a href="#" class="admin_menu _add_new_user_">Add User&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
 	</li>
 	</ul>

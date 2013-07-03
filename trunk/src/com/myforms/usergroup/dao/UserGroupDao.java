@@ -3,6 +3,7 @@ package com.myforms.usergroup.dao;
 import java.util.List;
 
 import com.myforms.anonymous.ClientSetupInfo;
+import com.myforms.anonymous.ClientStatus;
 import com.myforms.client.Client;
 import com.myforms.usergroup.model.Role;
 import com.myforms.usergroup.model.User;
@@ -17,4 +18,7 @@ public interface UserGroupDao {
 	public void saveUser(User user);
 	public User getPartialUserByUserName(String username);
 	public void saveAnonymousClientSetupInfo(ClientSetupInfo clientSetupInfo);
+	public List<ClientSetupInfo> getAllAnonymousClientSetupInfo();
+	public void updateClientStatus(ClientStatus clientStatus, List<Long> ids);
+	public List<ClientSetupInfo> geAnonymousClientSetupInfos(List<Long> list);
 }

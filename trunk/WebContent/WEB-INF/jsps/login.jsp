@@ -1,4 +1,4 @@
-<%--@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -176,5 +176,4 @@ A:hover {text-decoration: underline; color: black;}
 <br/>&copy;Copyright 2012. All Rights are Reserved Mohd Irshad 
 </div>
 </body>
-</html>--%>
-<meta HTTP-EQUIV="REFRESH" content="0; url=login.html">
+</html>

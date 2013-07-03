@@ -71,6 +71,7 @@ public void loadPropertiesFromXml() throws DocumentException, MalformedURLExcept
 	} 
 	properties.putAll(map);
 	properties.putAll(properties);
+	properties.putAll(System.getProperties());
 	MyFormsLogger.getLogger().info("all properties initialized" + properties);
 }
 public void loadPropertiesFromPFile()

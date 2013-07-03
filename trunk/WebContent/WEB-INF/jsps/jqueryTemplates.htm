@@ -27,6 +27,40 @@
 </div>
 </script>
 
+<script id="displayDataAsTable" type="text/x-jquery-tmpl">
+{{each(key, val) buttons}}
+<a class="button ${key}"  style="height: 75%; margin-bottom: 10px;" href="#">${val}</a>
+{{/each}}
+<div class="clientTableDiv">
+<table class="clientTable">
+{{each(i,v) clients}}
+{{if i == 0}}
+    <thead>
+{{if addCheckbox}}
+<th style="width:15px;"></th>
+{{/if}}
+	{{each(ind,val) v}}
+       <th>${val}</th>
+	{{/each}}
+	</thead
+{{else}}
+<tr class="{{= i % 2 ? 'alt' : 'odd'}}">
+{{if addCheckbox == true}}
+<td  style="width:15px;">
+<input  style="width:15px;" type= 'checkbox' value='${v.id}'/>
+</td>
+{{/if}}
+{{each(ind,val) v}}
+<td>${val}</td>
+{{/each}}
+ </tr>
+{{/if}}
+{{/each}}
+
+</table>
+</div>
+</script>
+
 <script id="tableDataTemplate" type="text/x-jquery-tmpl">
 <div class="clientTableDiv">
 <table class="clientTable">

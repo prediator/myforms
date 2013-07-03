@@ -95,6 +95,22 @@ SELECT ID,
        VRSN
        FROM TRAN_DOC
 </select>
+<select id="getAllDocumentsForTemplates" parameterClass="java.util.List" resultMap="documentResultMap">
+SELECT ID,
+       DISPLAY_ID,
+       TITLE,
+       CRTD_BY,
+       CRTD_ON,
+       TMPL_ID,
+       LST_UPDTED_ON,
+       LST_UPDTED_BY,
+       VRSN
+       FROM TRAN_DOC
+       where tmpl_id in <iterate open="(" close=")" conjunction=",">
+	       #[]#
+		</iterate>
+</select>
+
 <select id="isDisplayIdExist" parameterClass="java.lang.String" resultClass="java.lang.Integer">
 SELECT 1 as result
        FROM TRAN_DOC where DISPLAY_ID = #value#
