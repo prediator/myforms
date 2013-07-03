@@ -3,7 +3,6 @@ package com.myforms.dao;
 import java.sql.SQLException;
 import java.util.List;
 
-import javax.management.RuntimeErrorException;
 
 import org.springframework.orm.ibatis.SqlMapClientCallback;
 import org.springframework.orm.ibatis.SqlMapClientTemplate;

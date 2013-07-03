@@ -13,10 +13,12 @@
 </resultMap>
 <resultMap class="clientSetupInfo" id="clientSetupInfoResultMap">
 	<result property="id" column="id"/>
-	<result property="clientName" column="clnt_name"/>
+	<result property="clientName" column="clnt_nm"/>
 	<result property="name" column="uname"/>
 	<result property="emailId" column="email"/>
 	<result property="contactNo" column="cnt_no"/>
+	<result property="status" column="st"/>
+	<result property="statusChangeDate" column="st_ch_dt"/>
 </resultMap>
 <select id="getClientById" parameterClass="java.lang.Long" resultMap="clientResultMap">
 	select clnt_id, clnt_name, clnt_desc from clnt where clnt_id = #value#
@@ -28,6 +30,24 @@
 INSERT INTO CLNT (clnt_id,clnt_name,clnt_desc) VALUES (#clientId#,#clientName#,#description#)
 </insert>
 <insert id="saveAnonymousClient" parameterClass="clientSetupInfo">
-INSERT INTO anms_clnt (id,uname,clnt_nm,email,cnt_no) VALUES (#id#,#name#,#clientName#,#emailId#,#contactNo#)
+INSERT INTO anms_clnt (id,uname,clnt_nm,email,cnt_no,st) VALUES (#id#,#name#,#clientName#,#emailId#,#contactNo#,#status#)
 </insert>
+<select id="getAllAnonymousClient"  resultMap="clientSetupInfoResultMap">
+	select id,uname,clnt_nm,email,cnt_no,st,st_ch_dt from anms_clnt
+</select>
+<update id="updateClientStatus" parameterClass="java.util.Map">
+ update anms_clnt set st = #status#, st_ch_dt = #dt#   where id = #id#
+ <!-- in 
+ 
+ <iterate open="(" close=")" conjunction="," removeFirstPrepend="true"  property="ids">
+	       #[]#
+		</iterate-->
+</update>
+<select id="getAnonymousClientByIds" parameterClass="java.util.List"  resultMap="clientSetupInfoResultMap">
+	select id,uname,clnt_nm,email,cnt_no,st,st_ch_dt from anms_clnt where id in 
+	<iterate open="(" close=")" conjunction=",">
+	       #[]#
+		</iterate>
+	
+</select>
 </sqlMap>

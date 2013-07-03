@@ -5,11 +5,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.security.core.GrantedAuthority;
 
 import com.myforms.constants.MyFormsConstants;
 import com.myforms.usergroup.model.User;
+import com.spring.service.bean.GrantedAuthorityImpl;
 
 public class MyFormsUtils {
 public static String getFilePath(Integer documentId, User user){
@@ -40,5 +43,16 @@ public static List<String> convertToDataList(String text){
 public static String getFormattedDate(Date date){
 	DateFormat dateFormat = new SimpleDateFormat(MyFormsConstants.DATE_FORMAT);
 	return dateFormat.format(date);
+}
+public static String createDefaultPassword(int length)
+{
+	if(length > 15)
+		throw new RuntimeException("invalid password length : " + length);
+	return UUID.randomUUID().toString().substring(0,length);
+}
+public static List<GrantedAuthority> createAdminAuthorities()
+{
+	//GrantedAuthority authority = new GrantedAuthorityImpl("");
+	return null;
 }
 }

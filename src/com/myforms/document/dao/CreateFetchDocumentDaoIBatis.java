@@ -56,4 +56,10 @@ public class CreateFetchDocumentDaoIBatis extends SqlMapClientDaoSupport impleme
 		return (List<Document>)getSqlMapClientTemplate().queryForList("document.getAllDocuments");
 	}
 
+	/**
+	 * 
+	 */
+	public List<Document> getAllDocuments(List<Long> templateIds) throws DocumentNotFoundException{
+		return (List<Document>)getSqlMapClientTemplate().queryForList("document.getAllDocumentsForTemplates", templateIds);
+	}
 }

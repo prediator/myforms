@@ -7,6 +7,9 @@
 <typeAlias type="com.myforms.usergroup.model.User" alias="users"/>
 <typeAlias type="com.myforms.usergroup.model.Role" alias="role"/>
 <typeAlias type="com.spring.service.bean.GrantedAuthorityImpl" alias="grantedauthority"/>
+<resultMap class="grantedauthority"  id="grantedauthorityResultMap">
+<result property="authority" column="authority"/>
+</resultMap>
 <resultMap class="login" id="loginResultMap">
 <result property="username" column="username"/>
 <result property="password" column="password"/>
@@ -42,7 +45,7 @@ select username,password from login
 <insert id="insertLogin" parameterClass="login">
 insert into login (username, password) values(#username#,#password#);
 </insert>
-<select id="getRolesByUserid" parameterClass="java.lang.Integer"  resultClass="grantedauthority">
+<select id="getRolesByUserid" parameterClass="java.lang.Integer"  resultMap="grantedauthorityResultMap">
 select role as authority from roles where roleid in (select distinct roleid from user_roles where userid = #value#)
 </select>
 <select id="getUserById" parameterClass="java.lang.Long" resultMap="userResultMap">

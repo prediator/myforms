@@ -18,25 +18,27 @@ http://www.springframework.org/schema/security/spring-security-3.0.3.xsd">
  
         <!-- Don't set any role restrictions on login.jsp -->
         <intercept-url pattern="/login.html" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-        <intercept-url pattern="/read*.html" access="ROLE_SUPERVISOR" />
-        <intercept-url pattern="/edit*.html" access="ROLE_SUPERVISOR" />
-        <intercept-url pattern="/home.html" access="ROLE_SUPERVISOR, ROLE_USER" />
-        <intercept-url pattern="/templateData.html" access="ROLE_SUPERVISOR" />        
-        <intercept-url pattern="/refreshTemplate.html" access="ROLE_SUPERVISOR" />
-        <intercept-url pattern="/createUpdateTemplate.html" access="ROLE_SUPERVISOR" />
-        <intercept-url pattern="/createHtmlDoc.html" access="ROLE_SUPERVISOR" />  
-        <intercept-url pattern="/upload.html" access="ROLE_SUPERVISOR" />    
-        <intercept-url pattern="/getListForUser.html" access="ROLE_SUPERVISOR" />
-        <intercept-url pattern="/clients.html" access="ROLE_SUPERVISOR" />
-        <intercept-url pattern="/saveClient.html" access="ROLE_SUPERVISOR" />
-        <intercept-url pattern="/getAccessData.html" access="ROLE_SUPERVISOR" /> 
-        <intercept-url pattern="/clientsData.html" access="ROLE_SUPERVISOR" /> 
-        <intercept-url pattern="/saveUser.html" access="ROLE_SUPERVISOR" />
-        <intercept-url pattern="/getTemplateFieldTypes.html" access="ROLE_SUPERVISOR" />
-        <intercept-url pattern="/clientTemplateData.html" access="ROLE_SUPERVISOR" />
-        <intercept-url pattern="/clientTemplateFieldData.html" access="ROLE_SUPERVISOR" />
-        <intercept-url pattern="/getDocumentHistory.html" access="ROLE_SUPERVISOR, ROLE_USER" />
+        <intercept-url pattern="/read*.html" access="ROLE_SUPERVISOR, ROLE_SUPERADMIN" />
+        <intercept-url pattern="/edit*.html" access="ROLE_SUPERVISOR, ROLE_SUPERADMIN" />
+        <intercept-url pattern="/home.html" access="ROLE_SUPERVISOR, ROLE_USER, ROLE_SUPERADMIN" />
+        <intercept-url pattern="/templateData.html" access="ROLE_SUPERVISOR, ROLE_SUPERADMIN" />        
+        <intercept-url pattern="/refreshTemplate.html" access="ROLE_SUPERVISOR, ROLE_SUPERADMIN" />
+        <intercept-url pattern="/createUpdateTemplate.html" access="ROLE_SUPERVISOR, ROLE_SUPERADMIN" />
+        <intercept-url pattern="/createHtmlDoc.html" access="ROLE_SUPERVISOR, ROLE_SUPERADMIN" />  
+        <intercept-url pattern="/upload.html" access="ROLE_SUPERVISOR, ROLE_SUPERADMIN" />    
+        <intercept-url pattern="/getListForUser.html" access="ROLE_SUPERVISOR, ROLE_SUPERADMIN" />
+        <intercept-url pattern="/clients.html" access="ROLE_SUPERVISOR, ROLE_SUPERADMIN" />
+        <intercept-url pattern="/saveClient.html" access="ROLE_SUPERVISOR, ROLE_SUPERADMIN" />
+        <intercept-url pattern="/getAccessData.html" access="ROLE_SUPERVISOR, ROLE_SUPERADMIN" /> 
+        <intercept-url pattern="/clientsData.html" access="ROLE_SUPERVISOR, ROLE_SUPERADMIN" /> 
+        <intercept-url pattern="/saveUser.html" access="ROLE_SUPERVISOR, ROLE_SUPERADMIN" />
+        <intercept-url pattern="/getTemplateFieldTypes.html" access="ROLE_SUPERVISOR, ROLE_SUPERADMIN" />
+        <intercept-url pattern="/clientTemplateData.html" access="ROLE_SUPERVISOR, ROLE_SUPERADMIN" />
+        <intercept-url pattern="/clientTemplateFieldData.html" access="ROLE_SUPERVISOR, ROLE_SUPERADMIN" />
+        <intercept-url pattern="/getDocumentHistory.html" access="ROLE_SUPERVISOR, ROLE_USER, ROLE_SUPERADMIN" />
         <intercept-url pattern="/clientSetupRequest.html" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <intercept-url pattern="/getAllAnonymousClientSetupInfo.html" access="ROLE_SUPERADMIN" />
+        <intercept-url pattern="/saveClientStatus.html" access="ROLE_SUPERADMIN" />
  		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <logout/>
          <remember-me/>
@@ -54,7 +56,7 @@ http://www.springframework.org/schema/security/spring-security-3.0.3.xsd">
     </authentication-manager>
     <beans:bean id="authenticationEntryPoint"
 class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-<beans:property name="loginFormUrl" value="/index.jsp?login_error=1"/>
+<beans:property name="loginFormUrl" value="/login.html?login_error=1"/>
 </beans:bean>
 <beans:bean id="demoAccessDecisionManager" class="org.myforms.security.DemoAcessDecisionManager"></beans:bean>
 </beans:beans>

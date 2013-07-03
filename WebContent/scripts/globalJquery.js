@@ -290,6 +290,7 @@ $(document).ready(function() {
 	});	
 	
 	$('._view_clients').live('click',viewAllClients);
+	$('._view_client_setup').live('click',viewAnonymousClints);
 });
 
 function submitTemplate(){
@@ -520,7 +521,54 @@ function loadData(url,divId){
 		  }
 	});
 }
-
+viewAnonymousClints = function(){
+	$.ajax({
+		  type : "GET",
+        url:'getAllAnonymousClientSetupInfo.html',
+		  success: function(result){
+		  var data = {};
+		  data = $.parseJSON(result);
+		  $( ".admin_panel_content" ).empty();
+		  var buttons = {};
+		 		  buttons['add _approve_client_setup_request'] = "Approve selected";
+		 		 buttons['delete _decline_client_setup_request'] = "Decline selected";
+		 
+		   $( "#displayDataAsTable" ).tmpl( {clients : data, buttons: buttons, 'addCheckbox':true}).appendTo( ".admin_panel_content" );
+		   $('._approve_client_setup_request').on('click', updateCLientStatus);
+		   $('._decline_client_setup_request').on('click', updateCLientStatus);
+		  },
+		  error:function(){
+			  alert("error in populating clients.");
+		  }
+	});
+}
+updateCLientStatus = function(){
+	var data = {};
+	if($(this).hasClass('delete')){
+		data['request'] = 'decline';
+	}
+	else
+		data['request'] = 'approve';
+	data['data'] = '';
+	 $(this).siblings('.clientTableDiv').find('input[type=checkbox]:checked').each(function(){
+		 data['data'] = data['data'] + $(this).val() + ',';
+	});
+	 if(data['data'].length > 0){
+		 data['data'] = data['data'].substring(0, data['data'].length-1);
+	 }
+	if(data['data'] && data['data'].length > 0){
+		$.ajax({url : "saveClientStatus.html",type: "POST", data: data, success : function(result){
+			
+			if(result == 'success'){
+				alert('Data update successful!!');
+				$('._view_client_setup').trigger('click');				
+			}
+			else
+				alert('There seems to be some issue with data update. Please try later.');
+		}
+		});
+	}
+}
 viewAllClients = function(){
 $.ajax({
 		  type : "GET",

@@ -13,5 +13,6 @@ public interface CreateFetchDocumentDao {
 	public Document getDocumentById(Integer documentId) throws DocumentNotFoundException;
 	@Secured("ROLE_ADMIN")
 	public List<Document> getAllDocuments() throws DocumentNotFoundException;
+	public List<Document> getAllDocuments(List<Long> templateIds) throws DocumentNotFoundException;
 
 }

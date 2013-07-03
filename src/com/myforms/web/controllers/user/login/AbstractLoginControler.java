@@ -7,8 +7,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.myforms.security.SecurityContextAccessor;
 import com.myforms.usergroup.service.UserGroupService;
 import com.myforms.util.MyFormProperties;
+import com.myforms.util.PropertyEditor;
 import com.myforms.web.validator.login.LoginValidator;
 
 public abstract class AbstractLoginControler {
@@ -18,6 +20,9 @@ public abstract class AbstractLoginControler {
 	private LoginValidator loginValidator;
 	@Autowired
 	private UserGroupService userGroupService;
+	@Autowired
+	private SecurityContextAccessor securityContextAccessor;
+	//private final static String defaultTargetUrl = PropertyEditor.getInstance().getProperty("myforms.login.default.url");
 	/**
 	 * This method will do authentication for the user. return true if successful else return false.
 	 * @param user
@@ -45,6 +50,13 @@ protected boolean doValidate(UserDetails user){
 		return loginValidator.validate(user);
 	else 
 		return true;
+}
+protected final String redirectView(){
+	if (securityContextAccessor.isCurrentAuthenticationAnonymous()) {
+		return "redirect:" + PropertyEditor.getInstance().getProperty("myforms.login.default.url");
+	    } else {	      
+	      return "login";
+	    }
 }
 /**
  * 

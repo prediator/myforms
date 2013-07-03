@@ -33,7 +33,7 @@
  	 
  	 
 	<bean id="applicationProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-	    <property name="location" value="classpath:database.properties"/>
+	    <property name="location" value="classpath:application.properties"/>
 	</bean>
 		
 	<bean id="sqlMapClient" class = "org.springframework.orm.ibatis.SqlMapClientFactoryBean">
@@ -94,6 +94,18 @@
    <property name="basename" value="messages"/>  
 </bean> 
 	
+	<!-- Mail -->
+<bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <property name="host" value="${mail.server.host}" />
+    <property name="port" value="${mail.server.port}" />
+    <property name="protocol" value="smtp" />
+    <!-- property name="username" value="${mail.server.username}" />
+    <property name="password" value="${mail.server.password}" /-->    
+</bean> 
+<bean id="mailSender" class="com.myforms.mail.MailSenderImpl">
+<property name="javaMailSender" ref="javaMailSender"/>
+</bean>
+<bean id="securityContextAccessor" class="com.myforms.security.SecurityContextAccessorImpl"></bean>
 <import resource="daoContext/dao.xml"/>
 <import resource="serviceContext/service.xml"/>
 	

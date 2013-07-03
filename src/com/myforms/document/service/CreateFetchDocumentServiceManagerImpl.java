@@ -152,4 +152,12 @@ private BooleanSelectedValue findBooleanValue(String value,
 		return list;
 	}
 
+/**
+ * 
+ */
+public List<Document> getAllDocuments(List<Long> templateIds)
+		throws DocumentNotFoundException {
+	return createFetchDocumentDao.getAllDocuments(templateIds);
+}
+
 }

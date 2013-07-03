@@ -45,6 +45,7 @@
 	<bean name="userGroupService" class="com.myforms.usergroup.service.UserGroupServiceImpl">
 		<property name="userGroupDao" ref="userGroupDao"></property>
 		<property name="racfService" ref="racfService"></property>
+		<property name="encryptionDecryptionService" ref="encryptionDecryptionService"></property>
 	</bean>
 	
 	<bean id="fieldServiceManager" class="com.myforms.field.service.FieldServiceManagerImpl">
@@ -91,5 +92,8 @@
   </bean>
 	<bean id="documentHistoryService" class="com.myforms.history.service.DocumentHistoryServiceImpl">
   	 <property name="documentHistoryDao" ref="documentHistoryDao"/>
+  </bean>
+  <bean id="encryptionDecryptionService" class="com.myforms.cryptography.NoEncryptionService">
+  	
   </bean>
 </beans>

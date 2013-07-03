@@ -2,15 +2,21 @@ package com.myforms.usergroup.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.util.CollectionUtils;
 
 import com.myforms.anonymous.ClientSetupInfo;
+import com.myforms.anonymous.ClientStatus;
 import com.myforms.client.Client;
 import com.myforms.constants.MyFormsConstants;
+import com.myforms.cryptography.EncryptionDecryptionService;
+import com.myforms.exception.CryptographyException;
+import com.myforms.mail.MailSender;
 import com.myforms.racf.AccessType;
 import com.myforms.racf.Racf;
 import com.myforms.racf.service.RacfService;
@@ -18,13 +24,23 @@ import com.myforms.usergroup.dao.UserGroupDao;
 import com.myforms.usergroup.model.Role;
 import com.myforms.usergroup.model.User;
 import com.myforms.usergroup.model.UserBean;
+import com.myforms.util.MyFormsUtils;
 
 public class UserGroupServiceImpl implements UserGroupService {
 	
 	@Autowired(required = true)
 	private UserGroupDao userGroupDao;
 	private RacfService racfService;
+	private EncryptionDecryptionService encryptionDecryptionService;
+	private MailSender mailSender;
 	
+	public EncryptionDecryptionService getEncryptionDecryptionService() {
+		return encryptionDecryptionService;
+	}
+	public void setEncryptionDecryptionService(
+			EncryptionDecryptionService encryptionDecryptionService) {
+		this.encryptionDecryptionService = encryptionDecryptionService;
+	}
 	public User getUserById(Long userId) {
 		return userGroupDao.getUserById(userId);
 	}
@@ -115,4 +131,62 @@ public class UserGroupServiceImpl implements UserGroupService {
 	public void saveAnonymousClientSetupInfo(ClientSetupInfo clientSetupInfo) {
 		userGroupDao.saveAnonymousClientSetupInfo(clientSetupInfo);
 	}
+/**
+ * 
+ */
+	public List<ClientSetupInfo> getAllAnonymousClientSetupInfo(){
+		return userGroupDao.getAllAnonymousClientSetupInfo();
+	}
+@Override
+/**
+ * 
+ */
+public void updateClientStatus(ClientStatus clientStatus, List<ClientSetupInfo> clientSetupInfos , List<Long> list) throws CryptographyException {
+	
+	ListIterator<ClientSetupInfo> iterator = clientSetupInfos.listIterator();
+	while(iterator.hasNext()){
+		ClientSetupInfo info = iterator.next();
+		if(!MyFormsConstants.AnymClientStatus.NA.equals(info.getStatus())){
+			iterator.remove();
+			list.remove(info.getId());
+		}
+	}
+	userGroupDao.updateClientStatus(clientStatus, list);		
+}
+/**
+ * 
+ * @param client
+ * @return
+ * @throws CryptographyException 
+ */
+public User createUser(Client client, ClientSetupInfo clientSetupInfo) throws CryptographyException {
+	User user = new User();
+	user.setFirstName(clientSetupInfo.getName());
+	user.setClient(client);
+	user.setIsEnabled(true);
+	user.setPassword(encryptionDecryptionService.encrypt(MyFormsUtils.createDefaultPassword(6)));
+	user.setUsername("user"+client.getClientId());
+	user.setCreatedOn(new Date(System.currentTimeMillis()));
+	//user.setAuthorities(authorities)
+	
+	UserBean userBean = new UserBean();
+	userBean.setClientId(client.getClientId().toString());
+	userBean.setRole("2");
+	saveUser(user, userBean);
+	
+	return user;
+}
+/**
+ * 
+ */
+public List<ClientSetupInfo> geAnonymousClientSetupInfos(List<Long> list){
+	return userGroupDao.geAnonymousClientSetupInfos(list);
+}
+public MailSender getMailSender() {
+	return mailSender;
+}
+public void setMailSender(MailSender mailSender) {
+	this.mailSender = mailSender;
+}
+
 }

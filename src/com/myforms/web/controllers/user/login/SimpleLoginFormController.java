@@ -21,17 +21,17 @@ private CreateFetchTemplateServiceManager createFetchTemplateServiceManager;
 private SaveUsersServiceManager saveUsersServiceManager;
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView handleRequest(User user, Model model) throws Exception {
+	public String handleRequest(User user, Model model) throws Exception {
 		
 		if(!super.doLogin(user)){
-			return new ModelAndView(new RedirectView("index.jsp?login_error=4"));
+			return "redirect:login.html";
 		}
 		
-		return new ModelAndView(new RedirectView("home.html"));
+		return "redirect:home.html";
 	}
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView login(User login) throws Exception {
-		return new ModelAndView(new RedirectView("index.jsp?login_error=1"));
+	public String login(User login) throws Exception {
+		return redirectView();
 	}
 	
 

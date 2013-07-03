@@ -289,8 +289,19 @@ public String NA = "N/A";
 			}	
 		};
 	}
+	public interface AnymClientStatus{
+		String NA = "NA";
+		String APPROVED = "Approved";
+		String DECLISNED = "Declined";
+	}
+	public interface MeesageKey{
+		String CLIENT_RE_APPROVED = "clientRequestApproved";
+		String CLIENT_THANKS = "clientSetupThanks";
+		String CLIENT_RE_DECLINED = "clientRequestDeclined";
+	}
 	public String DATE_FORMAT = "MM/dd/yyyy";
 	public int RT_DATA_LENTGH = 999;
 	public String CLIENT_ACCESS_NODE = "Client";
 	public DateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
+	public String IS_AUTHENTICATED_ANONYMOUSLY = "IS_AUTHENTICATED_ANONYMOUSLY";
 }

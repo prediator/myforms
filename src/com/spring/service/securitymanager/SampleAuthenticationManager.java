@@ -31,7 +31,7 @@ public class SampleAuthenticationManager implements AuthenticationManager {
 	{
 		AUTHORITIES.add(ga);
 	}
-	if (auth.getName().equals(auth.getCredentials())) {
+	if (auth.getName().equals(auth.getPrincipal())) {
 	return new UsernamePasswordAuthenticationToken(auth.getName(),
 	auth.getCredentials(), AUTHORITIES);
 	}

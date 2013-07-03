@@ -11,4 +11,5 @@ public Document createDocumentByTemplateId(Integer templateId) throws InvalidTem
 public Document getDocumentByDisplayId(String displayId) throws DocumentNotFoundException;
 public Document getDocumentById(Integer documentId) throws DocumentNotFoundException;
 public List<Document> getAllDocuments() throws DocumentNotFoundException;
+public List<Document> getAllDocuments(List<Long> templateIds) throws DocumentNotFoundException;
 }

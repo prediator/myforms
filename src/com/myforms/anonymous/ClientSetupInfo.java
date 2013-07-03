@@ -1,5 +1,7 @@
 package com.myforms.anonymous;
 
+import java.util.Date;
+
 import org.springframework.format.annotation.NumberFormat;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.Email;
 import org.springmodules.validation.bean.conf.loader.annotation.handler.Length;
@@ -25,6 +27,8 @@ public class ClientSetupInfo {
 	private String emailId;
 	@NumberFormat(pattern="[0-9]")
 	private String contactNo;
+	private String status;
+	private Date statusChangeDate;
 	public Long getId() {
 		return id;
 	}
@@ -55,4 +59,17 @@ public class ClientSetupInfo {
 	public void setContactNo(String contactNo) {
 		this.contactNo = contactNo;
 	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public Date getStatusChangeDate() {
+		return statusChangeDate;
+	}
+	public void setStatusChangeDate(Date statusChangeDate) {
+		this.statusChangeDate = statusChangeDate;
+	}
+	
 }
